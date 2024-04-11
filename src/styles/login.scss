@@ -1,0 +1,27 @@
+.login-bg {
+    background-image: url("../assets/bluewaves.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.signup-bg {
+    background: linear-gradient(217deg, rgba(255, 0, 0, .8), rgba(255, 0, 0, 0) 70.71%),
+        linear-gradient(127deg, rgba(18, 20, 160, 0.8), rgba(0, 255, 0, 0) 70.71%),
+        linear-gradient(336deg, rgba(39, 46, 254, 0.8), rgba(0, 0, 255, 0) 70.71%);
+}
+
+.confirm-img {
+    width: 600px;
+    height: 400px;
+}
+
+@media screen and (max-width:640px) {
+    .auth-container {
+        width: 80%;
+    }
+
+    .confirm-img {
+        width: 300px;
+        height: 200px;
+    }
+}

@@ -1,0 +1,22 @@
+.banner-section {
+    background-image: url('../assets/banner-women.png');
+    /* Set background position to top right corner */
+    background-position: top right;
+    /* Ensure background image covers the entire viewport */
+    background-size: 726px;
+    /* Prevent background image from repeating */
+    background-repeat: no-repeat;
+
+    h1,p {
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media screen and (max-width: 640px) {
+    .banner-section {
+        background-image: none;
+        background-size: 320px 320px;
+    }
+}
