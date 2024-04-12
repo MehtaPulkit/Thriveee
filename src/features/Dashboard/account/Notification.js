@@ -1,43 +1,19 @@
 import React, { useState } from "react";
 const notificationData = [
   {
-    id: "OP",
-    name: "Offers & Products",
-    info: "Get latest update about all the offers and products",
-    sms: true,
-    email: true,
+    id: "Type",
+    name: "Notification via:",
+    info: "Your preference matters! choose what suits you:",
   },
   {
-    id: "SS",
-    name: "Smart suggestions",
-    info: "Suggestions to make your changes or update your account details",
-    sms: true,
-    email: true,
-  },
-  {
-    id: "IR",
-    name: "Investments Related",
-    info: "Get updates on any activity which is your investments related",
-    sms: true,
-    email: false,
-  },
-  {
-    id: "TR",
-    name: "Trust Related",
-    info: "All trust related activity will be notified",
-    sms: false,
-    email: true,
-  },
-  {
-    id: "SR",
-    name: "SMSF Related",
-    info: "All SMSF related activity will be notified",
-    sms: true,
-    email: false,
+    id: "NewsLetter",
+    name: "Subscribe to Newsletter",
+    info: "Get all the buzz about the products and offers.",
   },
 ];
 const Notification = () => {
   const [notifications, setNotifications] = useState([]);
+  const options = ["Email", "Mobile", "Both"];
   return (
     <div className="grid grid-cols-1 px-4 xl:grid-cols-2 xl:gap-4">
       <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 xl:mb-0">
@@ -55,41 +31,53 @@ const Notification = () => {
                   <div className="text-lg font-semibold text-gray-900 dark:text-white">
                     {noti.name}
                   </div>
-                  <div className="text-base font-normal text-gray-500 dark:text-gray-400">
+                  <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
                     {noti.info}
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div>
-                    SMS
+                  {noti.id == "Type" ? (
+                    <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                      {options.map((m, i) => (
+                        <li
+                          key={m}
+                          class={`w-full${
+                            i != options.length - 1 &&
+                            " border-gray-200 border-b sm:border-b-0 sm:border-r"
+                          } dark:border-gray-600`}
+                        >
+                          <div class="flex items-center ps-3">
+                            <input
+                              id="type-notification"
+                              type="radio"
+                              value=""
+                              name="list-radio"
+                              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                            />
+                            <label
+                              htmlFor="horizontal-notification"
+                              class="w-full py-3 px-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            >
+                              {m}
+                            </label>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
                     <label
-                      htmlFor={`sms-${noti.id}"`}
+                      htmlFor={noti.id}
                       className="relative flex items-center cursor-pointer"
                     >
                       <input
                         type="checkbox"
-                        id={`sms-${noti.id}"`}
+                        id={noti.id}
                         className="sr-only"
-                        checked={noti.sms}
+                        // checked={noti}
                       />
                       <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
-                  </div>
-                  <div>
-                    Email
-                    <label
-                      htmlFor={`email-${noti.id}`}
-                      className="relative flex items-center cursor-pointer"
-                    >
-                      <input
-                        type="checkbox"
-                        id={`email-${noti.id}`}
-                        className="sr-only"
-                        checked={noti.email}
-                      />
-                      <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
-                    </label>
-                  </div>
+                  )}
                 </div>
               </div>
             ))}

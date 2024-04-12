@@ -82,7 +82,7 @@ const Header = () => {
                     to={page.pageUrl}
                     className={`block py-2 px-3 text-white rounded ${
                       location.includes(page.pageUrl) && "bg-blue-600"
-                    } lg:bg-transparent hover:text-blue-700 lg:p-0 lg:dark:text-blue-500`}
+                    } lg:bg-transparent hover:bg-gray-200  hover:text-blue-700 lg:p-0 md:hover:bg-transparent lg:dark:text-blue-500 mb-2`}
                     aria-current="page"
                   >
                     {page.pageTitle}
@@ -92,7 +92,7 @@ const Header = () => {
               <li>
                 <div className="flex lg:hidden">
                   <Link
-                    to="/auth/login"
+                    to="/dashboard"
                     className="inline-flex justify-center items-center py-3 px-5 text-base mr-4 font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
                   >
                     Login
