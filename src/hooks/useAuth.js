@@ -23,7 +23,8 @@ const useAuth = () => {
       dateOfBirth,
       mobileNumber,
       profilePicture,
-      lastLogin
+      lastLogin,
+      notificationPreference,
     } = decoded.UserInfo;
 
     // isManager = roles.includes('Manager')
@@ -32,7 +33,7 @@ const useAuth = () => {
     // if (isManager) status = "Manager"
     // if (isAdmin) status = "Admin"
 
-    return  {
+    return {
       id,
       email,
       subscription,
@@ -45,8 +46,9 @@ const useAuth = () => {
       dateOfBirth,
       mobileNumber,
       profilePicture,
-      lastLogin
-    }
+      lastLogin,
+      notificationPreference,
+    };
     // return { username, roles, status, isManager, isAdmin }
   }
 

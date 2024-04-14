@@ -41,7 +41,6 @@ const Password = () => {
       currentPassword: currentpassword,
       password: newpassword,
     });
-    console.log(res);
     if (res.data) {
       toast.success("Your password is updated!", {
         position: "top-center",

@@ -19,7 +19,7 @@ const Input = ({
         htmlFor={id}
         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
       >
-        {label}
+        {label} 
       </label>
       <input
         {...register(name, {

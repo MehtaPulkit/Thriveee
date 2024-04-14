@@ -90,6 +90,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [{ type: "User", id: arg.id }],
     }),
+    updateUserNotifications: builder.mutation({
+      query: ({ id, ...notificationData }) => ({
+        url: `/users/${id}/notiPreference`,
+        method: "PATCH",
+        body: {
+          ...notificationData,
+        },
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: "User", id: arg.id }],
+    }),
     deleteUser: builder.mutation({
       query: ({ id }) => ({
         url: `/users`,
@@ -117,6 +127,7 @@ export const {
   useUploadProfilePictureMutation,
   useUpdateUserMutation,
   useUpdateUserAddressMutation,
+  useUpdateUserNotificationsMutation,
   useDeleteUserMutation,
   useDeleteProfilePictureMutation,
 } = userApiSlice;
