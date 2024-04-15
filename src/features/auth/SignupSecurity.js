@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { MaxPasswordLength, MinPasswordLength } from "../../config/minMax";
 import Input from "../../elements/Input";
-import { useAddNewUserMutation } from "../Dashboard/account/userApiSlice";
+import { useAddNewUserMutation } from "../dashboard/account/userApiSlice";
 
 import { Bounce, toast } from "react-toastify";
 
@@ -15,7 +15,7 @@ const SignupSecurity = ({ signupData, setStep }) => {
   });
   const [addNewUser, { isLoading, isError, isSuccess }] =
     useAddNewUserMutation();
-
+console.log(signupData);
   const handleSignupSecSubmit = async ({ newpassword, confirmpassword }) => {
     if (newpassword !== confirmpassword) {
       return toast.warn("Password and confirm password must match", {

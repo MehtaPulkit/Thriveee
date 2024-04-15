@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useUpdateUserNotificationsMutation } from "./userApiSlice";
+import { useUpdateUserNotificationsMutation } from "../userApiSlice.js";
 import { useForm } from "react-hook-form";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../../../hooks/useAuth.js";
 import { Bounce, toast } from "react-toastify";
-import { useGetNotificationPreferenceQuery } from "./notification/userNotificationApiSlice.js";
+import { useGetNotificationPreferenceQuery } from "./userNotificationApiSlice.js";
+import Toggle from "../../../../elements/Toggle.js";
+import RadioGrp from "../../../../elements/RadioGrp.js";
 const notificationData = [
   {
     id: "Type",
@@ -97,7 +99,7 @@ const Notification = () => {
           <form onSubmit={handleSubmit(handleNotificationPreference)}>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {notificationData.map((noti, i) => (
-                <div className="flex items-center justify-between py-4" key={i}>
+                <div className="flex flex-col gap-4 py-4 md:flex-row md:justify-between" key={i}>
                   <div className="flex flex-col flex-grow">
                     <div className="text-lg font-semibold text-gray-900 dark:text-white">
                       {noti.name}
@@ -109,58 +111,24 @@ const Notification = () => {
                   <div className="flex flex-col">
                     {noti.id == "Type" ? (
                       <>
-                        <ul className="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                          {options.map((m, i) => (
-                            <li
-                              key={m}
-                              className={`w-full${
-                                i != options.length - 1 &&
-                                " border-gray-200 border-b sm:border-b-0 sm:border-r"
-                              } dark:border-gray-600`}
-                            >
-                              <div className="flex items-center ps-3 ">
-                                <input
-                                  {...register("typeNotification", {
-                                    required: {
-                                      value: true,
-                                      message: `Notification preference is required`,
-                                    },
-                                  })}
-                                  id="type-notification"
-                                  type="radio"
-                                  value={m}
-                                  className="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                />
-                                <label
-                                  htmlFor="horizontal-notification"
-                                  className="w-full py-3 px-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
-                                  {m}
-                                </label>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                        {errors["typeNotification"]?.message && (
-                          <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                            {errors["typeNotification"]?.message}
-                          </p>
-                        )}
+                        <RadioGrp
+                          id="type-notification"
+                          register={register}
+                          errors={errors}
+                          name="typeNotification"
+                          required={true}
+                          requiredMessage="Notification preference is required"
+                          options={options}
+                        />
                       </>
                     ) : (
-                      <label
-                        htmlFor={noti.id}
-                        className="relative flex items-center cursor-pointer"
-                      >
-                        <input
-                          {...register("newsletterNotification")}
-                          type="checkbox"
-                          id={noti.id}
-                          className="sr-only"
-                          // checked={noti}
-                        />
-                        <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
-                      </label>
+                      <Toggle
+                        id={noti.id}
+                        register={register}
+                        required={false}
+                        errors={errors}
+                        name="newsletterNotification"
+                      />
                     )}
                   </div>
                 </div>

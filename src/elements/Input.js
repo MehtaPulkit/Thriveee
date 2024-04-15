@@ -13,6 +13,7 @@ const Input = ({
   max,
   required
 }) => {
+  const errorMessage = errors[name]?.message;
   return (
     <div className="col-span-6 sm:col-span-3">
       <label
@@ -40,9 +41,9 @@ const Input = ({
         }   `}
         placeholder={placeholder}
       />
-      {errors[name]?.message && (
+      {errorMessage && (
         <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-          {errors[name]?.message}
+          {errorMessage}
         </p>
       )}
     </div>

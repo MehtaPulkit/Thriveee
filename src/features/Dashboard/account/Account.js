@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Tabs from "../../../hooks/Tabs";
 import Breadcrumbs from "../../../hooks/Breadcrumbs";
-import { tablist } from "../../../config/AccountData";
+import { tablist } from "../../../config/accountData";
 
 const Account = () => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);

@@ -1,8 +1,8 @@
 import { store } from "../../app/store";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { userApiSlice } from "../Dashboard/account/userApiSlice";
-import { addressApiSlice } from "../Dashboard/account/Address/addressApiSlice";
+import { userApiSlice } from "../dashboard/account/userApiSlice";
+import { addressApiSlice } from "../dashboard/account/address/addressApiSlice";
 
 const Prefetch = () => {
   useEffect(() => {

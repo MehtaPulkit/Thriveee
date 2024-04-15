@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Input from "../../../../elements/Input";
 import {
-  useGetAddressesQuery,
-  useUpdateAddressMutation,
+  useGetAddressQuery,
 } from "./addressApiSlice";
 import useAuth from "../../../../hooks/useAuth";
 import { useUpdateUserAddressMutation } from "../userApiSlice";
@@ -11,11 +10,13 @@ import { Bounce, toast } from "react-toastify";
 
 const UserAddress = ({ type, addressId }) => {
   const { id } = useAuth();
-
-  const { address } = useGetAddressesQuery("addressesList", {
-    selectFromResult: ({ data }) => ({
-      address: data?.entities[addressId],
-    }),
+  const {
+    data: address,
+    isFetching,
+    isLoading: addressIsLoading,
+  } = useGetAddressQuery(addressId, {
+    refetchOnMountOrArgChange: true,
+    skip: false,
   });
   const {
     register,

@@ -9,6 +9,7 @@ const Checkbox = ({
   register,
   errors,
 }) => {
+  const errorMessage = errors[name]?.message;
   return (
     <>
       <div className="flex justify-center align-middle">
@@ -27,9 +28,9 @@ const Checkbox = ({
         <label htmlFor={id}>
          {label}
         </label>
-        {errors[name]?.message && (
+        {errorMessage && (
         <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-          {errors[name]?.message}
+          {errorMessage}
         </p>
       )}
       </div>

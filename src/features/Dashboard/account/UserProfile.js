@@ -13,7 +13,7 @@ import {
   useUploadProfilePictureMutation,
 } from "./userApiSlice";
 import { Bounce, toast } from "react-toastify";
-import UserAddress from "./Address/UserAddress";
+import UserAddress from "./address/UserAddress";
 import ProfilePic from "./ProfilePic";
 
 const UserProfile = () => {

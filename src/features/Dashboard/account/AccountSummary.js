@@ -1,10 +1,9 @@
 import React from "react";
 import useAuth from "../../../hooks/useAuth";
-import { tablist } from "../../../config/AccountData";
-import Card from "../../../hooks/LinkCard";
 import { Link } from "react-router-dom";
-import { useGetAddressesQuery } from "./Address/addressApiSlice";
+import { useGetAddressQuery, useGetAddressesQuery } from "./address/addressApiSlice";
 import { backendURL } from "../../../config/connection";
+import { useGetNotificationPreferenceQuery } from "./notification/userNotificationApiSlice";
 
 const AccountSummary = () => {
   const {
@@ -16,17 +15,31 @@ const AccountSummary = () => {
     postalAddress,
     profilePicture,
     currentAddress,
+    notificationPreference,
   } = useAuth();
 
-  const { postalAdd } = useGetAddressesQuery("addressesList", {
-    selectFromResult: ({ data }) => ({
-      postalAdd: data?.entities[postalAddress],
-    }),
+  const  {
+    data: postalAdd,
+    isLoading: postalAddIsLoading,
+  } = useGetAddressQuery(postalAddress, {
+    refetchOnMountOrArgChange: true,
+    skip: false,
   });
-  const { currentAdd } = useGetAddressesQuery("addressesList", {
-    selectFromResult: ({ data }) => ({
-      currentAdd: data?.entities[currentAddress],
-    }),
+  const {
+    data: currentAdd,
+    isLoading: currentAddIsLoading,
+  }  = useGetAddressQuery(currentAddress, {
+    refetchOnMountOrArgChange: true,
+    skip: false,
+  });
+
+  const {
+    data: notificationPrefData,
+    isFetching,
+    isLoading: notiPrefIsLoading,
+  } = useGetNotificationPreferenceQuery(notificationPreference, {
+    refetchOnMountOrArgChange: true,
+    skip: false,
   });
   return (
     <div>
@@ -125,7 +138,7 @@ const AccountSummary = () => {
               Subscription
             </h2>
           </Link>
-          <div className="text-gray-500 dark:text-gray-400">Free</div>
+          <div className="text-gray-500 dark:text-gray-400"><b>Free</b></div>
           <div className="text-gray-500 dark:text-gray-400">
             <b>Expirying</b>: 31/01/2026
           </div>
@@ -150,10 +163,16 @@ const AccountSummary = () => {
             </h2>
           </Link>
           <div className="text-gray-500 dark:text-gray-400">
-            <b> Email</b>: Marketing & account
+            <b> Via</b>:{" "}
+            {notificationPrefData?.typeNotification === "Email"
+              ? "Email"
+              : notificationPrefData?.typeNotification === "Mobile"
+              ? "Mobile"
+              : notificationPrefData?.typeNotification === "Both"?"Email & Mobile":"Not selected"}
           </div>
           <div className="text-gray-500 dark:text-gray-400">
-            <b>Mobile</b>: Account only
+            <b>Newsletter</b>:{" "}
+            {notificationPrefData?.newsletterNotification ? "On" : "Off"}
           </div>
         </div>
       </div>

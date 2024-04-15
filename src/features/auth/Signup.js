@@ -17,7 +17,7 @@ import SignupConfirmation from "./SignupConfirmation";
 import Checkbox from "../../elements/Checkbox";
 import {
   useCheckDuplicateMutation,
-} from "../Dashboard/account/userApiSlice";
+} from "../dashboard/account/userApiSlice";
 import SignupSecurity from "./SignupSecurity";
 import { useLocation } from 'react-router-dom';
 const Signup = () => {
@@ -279,10 +279,10 @@ const Signup = () => {
                       <div className="flex ">
                         <Checkbox
                           id="singup-newsletter"
-                          name="newsLetter"
+                          name="newsletter"
                           errors={errors}
                           register={register}
-                          label="Email me about product offers and services."
+                          label="Subscribe to newsletter to know all about our product offers and services."
                           required={false}
                         />
                       </div>
