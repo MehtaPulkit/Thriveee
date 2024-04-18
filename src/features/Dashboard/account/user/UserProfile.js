@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import {
   emailPattern,
   mobilePattern,
   namePattern,
-} from "../../../config/regexPatterns";
-import Input from "../../../elements/Input";
-import { MaxNameLength, MinNameLength } from "../../../config/minMax";
+} from "../../../../config/regexPatterns";
+import Input from "../../../../elements/Input";
+import { MaxNameLength, MinNameLength } from "../../../../config/minMax";
 import {
   useUpdateUserMutation,
   useUploadProfilePictureMutation,
 } from "./userApiSlice";
 import { Bounce, toast } from "react-toastify";
-import UserAddress from "./address/UserAddress";
+import UserAddress from "../address/UserAddress";
 import ProfilePic from "./ProfilePic";
 
 const UserProfile = () => {

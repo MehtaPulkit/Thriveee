@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useUpdateUserNotificationsMutation } from "../userApiSlice.js";
+import { useUpdateUserNotificationsMutation } from "../user/userApiSlice.js";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../../hooks/useAuth.js";
 import { Bounce, toast } from "react-toastify";

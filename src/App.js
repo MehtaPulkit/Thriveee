@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Bounce, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 import Layout from "./components/Layout";
 import Home from "./components/Home";
@@ -15,12 +15,16 @@ import Prefetch from "./features/auth/Prefetch";
 import DashboardLayout from "./features/dashboard/DashboardLayout";
 import DashboardHome from "./features/dashboard/DashboardHome";
 import Account from "./features/dashboard/account/Account";
-import UserProfile from "./features/dashboard/account/UserProfile";
+import UserProfile from "./features/dashboard/account/user/UserProfile";
 import AccountSummary from "./features/dashboard/account/AccountSummary";
-import Password from "./features/dashboard/account/Password";
+import Password from "./features/dashboard/account/password/Password";
 import Notification from "./features/dashboard/account/notification/Notification";
 
 import { ROLES } from "./config/roles";
+import ContactsList from "./features/dashboard/contacts/ContactsList";
+import Contact from "./features/dashboard/contacts/Contact";
+import ContactsLayout from "./features/dashboard/contacts/ContactsLayout";
+import EditContact from "./features/dashboard/contacts/EditContact";
 
 function App() {
   return (
@@ -50,25 +54,32 @@ function App() {
           </Route>
 
           <Route element={<PersistLogin />}>
-            <Route element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}>
-              <Route element={<Prefetch />}>
-                <Route path="/dashboard" element={<DashboardLayout />}>
-                  <Route index element={<DashboardHome />} />
-                  <Route path="account" element={<Account />}>
-                    <Route index element={<AccountSummary />} />
-                    <Route path="profile" element={<UserProfile />} />
-                    <Route path="password" element={<Password />} />
-                    <Route path="notification" element={<Notification />} />
-                  </Route>
-                  <Route path="financials" element={<Account />}>
-                    <Route path="profile" element={<UserProfile />} />
-                    <Route path="password" element={<Password />} />
-                    <Route path="notification" element={<Notification />} />
-                  </Route>
-                </Route>
+            {/* <Route
+              element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
+            >
+  <Route element={<Prefetch />}>*/}
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route index element={<DashboardHome />} />
+              <Route path="account" element={<Account />}>
+                <Route index element={<AccountSummary />} />
+                <Route path="profile" element={<UserProfile />} />
+                <Route path="password" element={<Password />} />
+                <Route path="notification" element={<Notification />} />
+              </Route>
+              <Route path="financials" element={<Account />}>
+                <Route path="profile" element={<UserProfile />} />
+                <Route path="password" element={<Password />} />
+                <Route path="notification" element={<Notification />} />
+              </Route>
+              <Route path="contacts" element={<ContactsLayout />}>
+                <Route index element={<ContactsList />} />
+                <Route path="create" element={<Contact />} />
+                <Route path="edit/:cID" element={<EditContact />} />
               </Route>
             </Route>
           </Route>
+          {/*</Route>
+          </Route> */}
 
           <Route path="*" element={<ErrorPage />} />
         </Routes>

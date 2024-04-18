@@ -17,7 +17,7 @@ import SignupConfirmation from "./SignupConfirmation";
 import Checkbox from "../../elements/Checkbox";
 import {
   useCheckDuplicateMutation,
-} from "../dashboard/account/userApiSlice";
+} from "../dashboard/account/user/userApiSlice";
 import SignupSecurity from "./SignupSecurity";
 import { useLocation } from 'react-router-dom';
 const Signup = () => {

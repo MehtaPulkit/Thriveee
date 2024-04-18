@@ -45,7 +45,7 @@ const navigate=useNavigate();
 
         return () => effectRan.current = true
 
-        // eslint-disable-next-line
+        // eslint-disable-nextLine
     }, [])
 
 

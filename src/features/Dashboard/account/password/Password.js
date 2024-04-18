@@ -1,9 +1,9 @@
 import React from "react";
-import Input from "../../../elements/Input";
+import Input from "../../../../elements/Input";
 import { useForm } from "react-hook-form";
-import { MaxPasswordLength, MinPasswordLength } from "../../../config/minMax";
-import useAuth from "../../../hooks/useAuth";
-import { useUpdateUserMutation } from "./userApiSlice";
+import { MaxPasswordLength, MinPasswordLength } from "../../../../config/minMax";
+import useAuth from "../../../../hooks/useAuth";
+import { useUpdateUserMutation } from "../user/userApiSlice";
 import { Bounce, toast } from "react-toastify";
 
 const Password = () => {

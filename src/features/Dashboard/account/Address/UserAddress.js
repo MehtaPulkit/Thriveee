@@ -5,7 +5,7 @@ import {
   useGetAddressQuery,
 } from "./addressApiSlice";
 import useAuth from "../../../../hooks/useAuth";
-import { useUpdateUserAddressMutation } from "../userApiSlice";
+import { useUpdateUserAddressMutation } from "../user/userApiSlice";
 import { Bounce, toast } from "react-toastify";
 
 const UserAddress = ({ type, addressId }) => {
@@ -18,6 +18,7 @@ const UserAddress = ({ type, addressId }) => {
     refetchOnMountOrArgChange: true,
     skip: false,
   });
+
   const {
     register,
     handleSubmit,

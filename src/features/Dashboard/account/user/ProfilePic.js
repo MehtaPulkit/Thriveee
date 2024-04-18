@@ -4,8 +4,8 @@ import {
   useUploadProfilePictureMutation,
 } from "./userApiSlice";
 import { useForm } from "react-hook-form";
-import { backendURL } from "../../../config/connection";
-import { useRefreshMutation } from "../../auth/authApiSlice";
+import { backendURL } from "../../../../config/connection";
+import { useRefreshMutation } from "../../../auth/authApiSlice";
 
 const ProfilePic = ({ firstName, lastName, profilePicture }) => {
   const [image, setImage] = useState(null);

@@ -9,17 +9,23 @@ const RadioGrp = ({
   register,
   errors,
   options,
-  requiredMessage
+  requiredMessage,
+  needHeading,
+  heading
 }) => {
-
   const errorMessage = errors[name]?.message;
   return (
-    <>
+    <div className="col-span-6 sm:col-span-6">
+      {needHeading && (
+        <h3 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          {heading}{required && <span className="text-red-500">*</span>}
+        </h3>
+      )}
       <ul className="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
         {options.map((option, i) => (
           <li
             key={option}
-            className={`w-full${
+            className={`w-full ${
               i != options.length - 1 &&
               " border-gray-200 border-b sm:border-b-0 sm:border-r"
             } dark:border-gray-600`}
@@ -52,7 +58,7 @@ const RadioGrp = ({
           {errorMessage}
         </p>
       )}
-    </>
+    </div>
   );
 };
 
