@@ -5,7 +5,7 @@ const Select = ({ options, id, label, selectedOption, setSelectedOption }) => {
     <div className="col-span-6 sm:col-span-3">
       <label
         htmlFor={id}
-        className="block font-medium text-sm text-gray-700 dark:text-gray-400"
+        className="block font-semibold text-sm text-gray-700 dark:text-gray-400"
       >
         {label}
       </label>

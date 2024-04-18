@@ -54,32 +54,32 @@ function App() {
           </Route>
 
           <Route element={<PersistLogin />}>
-            {/* <Route
+            <Route
               element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
             >
-  <Route element={<Prefetch />}>*/}
-            <Route path="/dashboard" element={<DashboardLayout />}>
-              <Route index element={<DashboardHome />} />
-              <Route path="account" element={<Account />}>
-                <Route index element={<AccountSummary />} />
-                <Route path="profile" element={<UserProfile />} />
-                <Route path="password" element={<Password />} />
-                <Route path="notification" element={<Notification />} />
-              </Route>
-              <Route path="financials" element={<Account />}>
-                <Route path="profile" element={<UserProfile />} />
-                <Route path="password" element={<Password />} />
-                <Route path="notification" element={<Notification />} />
-              </Route>
-              <Route path="contacts" element={<ContactsLayout />}>
-                <Route index element={<ContactsList />} />
-                <Route path="create" element={<Contact />} />
-                <Route path="edit/:cID" element={<EditContact />} />
+              <Route element={<Prefetch />}>
+                <Route path="/dashboard" element={<DashboardLayout />}>
+                  <Route index element={<DashboardHome />} />
+                  <Route path="account" element={<Account />}>
+                    <Route index element={<AccountSummary />} />
+                    <Route path="profile" element={<UserProfile />} />
+                    <Route path="password" element={<Password />} />
+                    <Route path="notification" element={<Notification />} />
+                  </Route>
+                  <Route path="financials" element={<Account />}>
+                    <Route path="profile" element={<UserProfile />} />
+                    <Route path="password" element={<Password />} />
+                    <Route path="notification" element={<Notification />} />
+                  </Route>
+                  <Route path="contacts" element={<ContactsLayout />}>
+                    <Route index element={<ContactsList />} />
+                    <Route path="create" element={<Contact />} />
+                    <Route path="edit/:cID" element={<EditContact />} />
+                  </Route>
+                </Route>
               </Route>
             </Route>
           </Route>
-          {/*</Route>
-          </Route> */}
 
           <Route path="*" element={<ErrorPage />} />
         </Routes>

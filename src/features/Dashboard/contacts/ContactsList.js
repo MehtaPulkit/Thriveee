@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Heading from "../../../hooks/Heading";
 import Table from "../../../hooks/Table";
-import { useGetContactsQuery } from "./contactApiSlice";
+import {
+  useDeleteContactMutation,
+  useGetContactsQuery,
+} from "./contactApiSlice";
 import { useNavigate } from "react-router-dom";
 import Select from "../../../elements/Select";
 import { Link } from "react-router-dom";
-import FormCheckbox from "../../../elements/FormCheckbox";
+import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
+
 const ContactsList = () => {
   const navigate = useNavigate();
-  const handleEdit = (rowData) => {
-    const path = "edit/" + rowData._id;
-    navigate(path);
-  };
-  const handleDelete = (rowData) => {
-    // Logic to handle delete action
-  };
-  const handleRowSelect = (rowData) => {
-    // Logic to handle row selection
-  };
   const { data, isError, isLoading, isFetching, isSuccess } =
     useGetContactsQuery();
   const [selectedOption, setSelectedOption] = useState({
@@ -34,6 +28,8 @@ const ContactsList = () => {
   const [tableData, setTableData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [showInactive, setShowInactive] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [rowData, setRowData] = useState({});
   const columns = [
     {
       Header: "Name",
@@ -42,10 +38,6 @@ const ContactsList = () => {
     {
       Header: "Contact ID",
       accessor: "contactId",
-    },
-    {
-      Header: "Type",
-      accessor: "contactType",
     },
     {
       Header: "Contact no",
@@ -60,6 +52,32 @@ const ContactsList = () => {
       accessor: "isActive",
     },
   ];
+
+  const [
+    deleteContact,
+    // { isLoading: deleteloading, isSuccess, isError, error },
+  ] = useDeleteContactMutation();
+  const handleEdit = (rowData) => {
+    const path = "edit/" + rowData._id;
+    navigate(path);
+  };
+  const handleDelete = (rowData) => {
+    // Logic to handle delete action
+
+    if (rowData) {
+      setShowDeletePopup(true);
+      setRowData(rowData);
+    }
+  };
+
+  const handleDeleteContact = async () => {
+    const res = await deleteContact({ id: rowData._id });
+    setShowDeletePopup(false);
+  };
+  const handleRowSelect = (rowData) => {
+    // Logic to handle row selection
+  };
+  
   useEffect(() => {
     if (!data?.entities) return;
 
@@ -90,11 +108,10 @@ const ContactsList = () => {
               id="contactType"
               label="Contact Type"
             />
-            {/* Search */}
 
             <label
               htmlFor="table-search"
-              className="block mb-2 font-medium text-sm text-gray-700 dark:text-gray-400"
+              className="block mb-2 font-semibold text-sm text-gray-700 dark:text-gray-400"
             >
               Search
               <div className="relative">
@@ -123,16 +140,16 @@ const ContactsList = () => {
                 />
               </div>
             </label>
-            <div class="flex items-center">
+            <div className="flex items-center">
               <label
                 for="checked-checkbox"
-                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 <input
                   id="contact-showInactive"
                   type="checkbox"
                   value={showInactive}
-                  class="w-4 h-4 m-2 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  className="w-4 h-4 m-2 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 cursor-pointer"
                   onChange={() => setShowInactive(!showInactive)}
                 />
                 Show inactive
@@ -160,7 +177,7 @@ const ContactsList = () => {
             </svg>
           </Link>
         </div>
-        {console.log(tableData)}
+
         {tableData && selectedOption.value && (
           <Table
             columns={columns}
@@ -174,6 +191,12 @@ const ContactsList = () => {
           />
         )}
       </div>
+
+      <DeleteConfirmationDialog
+        open={showDeletePopup}
+        onClose={() => setShowDeletePopup(!showDeletePopup)}
+        onConfirm={handleDeleteContact}
+      />
     </div>
   );
 };

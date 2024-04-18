@@ -20,11 +20,10 @@ import RadioGrp from "../../../elements/RadioGrp";
 import FormCheckbox from "../../../elements/FormCheckbox";
 import ContactAddress from "./ContactAddress";
 import TextArea from "../../../elements/TextArea";
-import {
-  useAddNewContactMutation,
-} from "./contactApiSlice";
+import { useAddNewContactMutation } from "./contactApiSlice";
 import { Bounce, toast } from "react-toastify";
 import useAuth from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Contact = () => {
   const { id } = useAuth();
@@ -38,6 +37,7 @@ const Contact = () => {
     defaultValues: {
       contactDesignation: "Individual",
       contactType: "Customer",
+      contactIsActive: true,
     },
   });
 
@@ -49,6 +49,7 @@ const Contact = () => {
   const [addNewContact, { isLoading, isError, isSuccess }] =
     useAddNewContactMutation();
 
+  const navigate = useNavigate();
   const handleContactForm = async ({
     abn,
     billingAdd1,
@@ -75,33 +76,6 @@ const Contact = () => {
     mobileNo,
     websiteURL,
   }) => {
-    console.log({
-      id,
-      abn,
-      billingAdd1,
-      billingAdd2,
-      billingPostCode,
-      billingState,
-      billingSuburb,
-      postalAdd1,
-      postalAdd2,
-      postalPostCode,
-      postalSuburb,
-      postalState,
-      phoneNo,
-      contactAddIsSame,
-      contactDesignation,
-      contactId,
-      contactIsActive,
-      companyName,
-      contactNotes,
-      contactType,
-      email,
-      firstName,
-      lastName,
-      mobileNo,
-      websiteURL,
-    });
     //TODO: Add conditional logic
     const res = await addNewContact({
       userId: id,
@@ -145,6 +119,10 @@ const Contact = () => {
         theme: localStorage.theme,
         transition: Bounce,
       });
+      setTimeout(() => {
+        navigate("/dashboard/contacts");
+      }, 500);
+      
     } else if (res.error) {
       toast.error("There was some error!", {
         position: "top-center",
