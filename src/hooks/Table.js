@@ -14,6 +14,7 @@ const Table = ({
   onDelete,
   onRowSelect,
   searchText,
+  selectionRequired,
 }) => {
   const {
     getTableProps,
@@ -35,7 +36,6 @@ const Table = ({
       columns,
       data,
     },
-
     useGlobalFilter,
     // Enable global filtering
     useSortBy, // Enable sorting
@@ -43,27 +43,28 @@ const Table = ({
     useRowSelect,
     (hooks) => {
       // Add a custom column for selecting rows
-      hooks.visibleColumns.push((columns) => [
-        {
-          id: "selection",
-          Header: ({ getToggleAllRowsSelectedProps }) => (
-            <input
-              type="checkbox"
-              {...getToggleAllRowsSelectedProps()}
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            />
-          ),
-          Cell: ({ row }) => (
-            <input
-              type="checkbox"
-              {...row.getToggleRowSelectedProps()}
-              onChange={() => onRowSelect(row.original)}
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            />
-          ),
-        },
-        ...columns,
-      ]);
+      selectionRequired &&
+        hooks.visibleColumns.push((columns) => [
+          {
+            id: "selection",
+            Header: ({ getToggleAllRowsSelectedProps }) => (
+              <input
+                type="checkbox"
+                {...getToggleAllRowsSelectedProps()}
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+            ),
+            Cell: ({ row }) => (
+              <input
+                type="checkbox"
+                {...row.getToggleRowSelectedProps()}
+                onChange={() => onRowSelect(row.original)}
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+            ),
+          },
+          ...columns,
+        ]);
     }
   );
 
@@ -217,90 +218,89 @@ const Table = ({
             })}
           </tbody>
         </table>
-        
       </div>
       <div
-          className="flex flex-col gap-4 md:flex-row
+        className="flex flex-col gap-4 md:flex-row
         justify-between mt-6 p-4"
-        >
-          <div class="flex">
-            <button
-              onClick={() => previousPage()}
-              disabled={!canPreviousPage}
-              className="flex items-center justify-center px-3 h-8 me-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      >
+        <div className="flex">
+          <button
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+            className="flex items-center justify-center px-3 h-8 me-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            <svg
+              className="w-3.5 h-3.5 me-2 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 10"
             >
-              <svg
-                class="w-3.5 h-3.5 me-2 rtl:rotate-180"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 5H1m0 0 4 4M1 5l4-4"
-                />
-              </svg>
-              Previous
-            </button>
-            <button
-              onClick={() => nextPage()}
-              disabled={!canNextPage}
-              className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 5H1m0 0 4 4M1 5l4-4"
+              />
+            </svg>
+            Previous
+          </button>
+          <button
+            onClick={() => nextPage()}
+            disabled={!canNextPage}
+            className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            Next
+            <svg
+              className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 10"
             >
-              Next
-              <svg
-                class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                />
-              </svg>
-            </button>
-          </div>
-
-          <div className="flex gap-6 items-center">
-            <span class="text-sm text-gray-700 dark:text-gray-400">
-              Showing
-              <span class="font-semibold text-gray-900 dark:text-white">
-                {startIndex}
-              </span>
-              to
-              <span class="font-semibold text-gray-900 dark:text-white">
-                {endIndex}
-              </span>
-              of
-              <span class="font-semibold text-gray-900 dark:text-white">
-                {data.length}
-              </span>
-              contacts
-            </span>
-            <select
-              value={pageSize}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              onChange={(e) => {
-                setPageSize(Number(e.target.value));
-              }}
-            >
-              {[10, 20, 30, 40, 50].map((pageSize) => (
-                <option key={pageSize} value={pageSize}>
-                  {pageSize}
-                </option>
-              ))}
-            </select>
-          </div>
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M1 5h12m0 0L9 1m4 4L9 9"
+              />
+            </svg>
+          </button>
         </div>
+
+        <div className="flex gap-6 items-center">
+          <span className="text-sm text-gray-700 dark:text-gray-400">
+            Showing{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {startIndex}
+            </span>{" "}
+            to{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {endIndex}
+            </span>{" "}
+            of{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {data.length}
+            </span>{" "}
+            contacts
+          </span>
+          <select
+            value={pageSize}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+            }}
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
     </>
   );
 };

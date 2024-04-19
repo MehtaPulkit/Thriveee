@@ -127,7 +127,7 @@ const ContactsList = () => {
               className="block mb-2 font-semibold text-sm text-gray-700 dark:text-gray-400"
             >
               Search
-              <div className="relative">
+              <div className="relative mt-1">
                 <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                   <svg
                     className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -174,7 +174,7 @@ const ContactsList = () => {
               Add new contact
             </span>
             <svg
-              className="w-8 h-8 text-blue-600 md:hidden dark:text-white"
+              className="w-8 h-8 text-blue-600 md:hidden"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -201,6 +201,7 @@ const ContactsList = () => {
             urltoNew="create"
             page="contact"
             searchText={searchText}
+            selectionRequired={false}
           />
         )}
       </div>
