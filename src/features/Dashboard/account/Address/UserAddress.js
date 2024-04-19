@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Input from "../../../../elements/Input";
-import {
-  useGetAddressQuery,
-} from "./addressApiSlice";
+import { useGetAddressQuery } from "./addressApiSlice";
 import useAuth from "../../../../hooks/useAuth";
 import { useUpdateUserAddressMutation } from "../user/userApiSlice";
 import { Bounce, toast } from "react-toastify";
@@ -78,25 +76,11 @@ const UserAddress = ({ type, addressId }) => {
     });
     if (res.data) {
       toast.success("Your address details are updated!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });
     } else if (res.error) {
       toast.error(`${res.error.data.message}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });

@@ -77,25 +77,11 @@ const ContactsList = () => {
     setShowDeletePopup(false);
     if (res.data) {
       toast.success("Contact deleted succesfully!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });
     } else if (res.error) {
       toast.error("There was some error!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });

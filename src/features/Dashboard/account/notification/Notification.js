@@ -53,25 +53,11 @@ const Notification = () => {
     });
     if (res.data) {
       toast.success("Your notification preferences are updated!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });
     } else if (res.error) {
       toast.error(`${res.error.data.message}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });
@@ -99,7 +85,10 @@ const Notification = () => {
           <form onSubmit={handleSubmit(handleNotificationPreference)}>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {notificationData.map((noti, i) => (
-                <div className="flex flex-col gap-4 py-4 md:flex-row md:justify-between" key={i}>
+                <div
+                  className="flex flex-col gap-4 py-4 md:flex-row md:justify-between"
+                  key={i}
+                >
                   <div className="flex flex-col flex-grow">
                     <div className="text-lg font-semibold text-gray-900 dark:text-white">
                       {noti.name}

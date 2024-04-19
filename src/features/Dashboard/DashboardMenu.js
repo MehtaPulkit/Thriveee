@@ -252,18 +252,14 @@ const DashboardMenu = ({ isOverlay, menuOpen, setMenuOpen }) => {
           />
         </svg>
       ),
-      submenu: [ {
-        id: "menu81",
-        name: "Create",
-        link: "contacts/create",
-        icon: "",
-      },
-      {
-        id: "menu82",
-        name: "Edit",
-        link: "contacts/edit",
-        icon: "",
-      },],
+      submenu: [
+        {
+          id: "menu81",
+          name: "Create",
+          link: "contacts/create",
+          icon: "",
+        },
+      ],
     },
   ];
   const lowerMenuItems = [

@@ -109,13 +109,6 @@ const Contact = () => {
     });
     if (res.data) {
       toast.success("Your details are updated!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });
@@ -124,13 +117,6 @@ const Contact = () => {
       }, 500);
     } else if (res.error) {
       toast.error("There was some error!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });

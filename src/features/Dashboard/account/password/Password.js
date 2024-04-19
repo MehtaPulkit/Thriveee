@@ -1,7 +1,10 @@
 import React from "react";
 import Input from "../../../../elements/Input";
 import { useForm } from "react-hook-form";
-import { MaxPasswordLength, MinPasswordLength } from "../../../../config/minMax";
+import {
+  MaxPasswordLength,
+  MinPasswordLength,
+} from "../../../../config/minMax";
 import useAuth from "../../../../hooks/useAuth";
 import { useUpdateUserMutation } from "../user/userApiSlice";
 import { Bounce, toast } from "react-toastify";
@@ -43,25 +46,11 @@ const Password = () => {
     });
     if (res.data) {
       toast.success("Your password is updated!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });
     } else if (res.error) {
       toast.error(`${res.error.data.message}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });

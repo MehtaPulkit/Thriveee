@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   useTable,
   useSortBy,
@@ -84,7 +83,7 @@ const Table = ({
           {...getTableProps()}
           className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
         >
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
@@ -158,11 +157,11 @@ const Table = ({
                     >
                       {cell.column.id == "isActive" ? (
                         cell.value ? (
-                          <span className="text-green-700 bg-green-100 p-2 rounded-md">
+                          <span className="text-green-700 bg-green-100 p-2 rounded-md dark:bg-green-800 dark:text-gray-100">
                             Active
                           </span>
                         ) : (
-                          <span className="bg-red-100 text-red-700 p-2 rounded-md">
+                          <span className="bg-red-100 text-red-700 p-2 rounded-md dark:bg-red-800 dark:text-gray-100">
                             Inactive
                           </span>
                         )
@@ -218,7 +217,9 @@ const Table = ({
             })}
           </tbody>
         </table>
-        <div
+        
+      </div>
+      <div
           className="flex flex-col gap-4 md:flex-row
         justify-between mt-6 p-4"
         >
@@ -271,18 +272,18 @@ const Table = ({
 
           <div className="flex gap-6 items-center">
             <span class="text-sm text-gray-700 dark:text-gray-400">
-              Showing{" "}
+              Showing
               <span class="font-semibold text-gray-900 dark:text-white">
                 {startIndex}
-              </span>{" "}
-              to{" "}
+              </span>
+              to
               <span class="font-semibold text-gray-900 dark:text-white">
                 {endIndex}
-              </span>{" "}
-              of{" "}
+              </span>
+              of
               <span class="font-semibold text-gray-900 dark:text-white">
                 {data.length}
-              </span>{" "}
+              </span>
               contacts
             </span>
             <select
@@ -300,7 +301,6 @@ const Table = ({
             </select>
           </div>
         </div>
-      </div>
     </>
   );
 };
