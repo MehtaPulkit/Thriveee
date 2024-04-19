@@ -122,7 +122,6 @@ const Contact = () => {
       setTimeout(() => {
         navigate("/dashboard/contacts");
       }, 500);
-      
     } else if (res.error) {
       toast.error("There was some error!", {
         position: "top-center",
@@ -327,7 +326,8 @@ const Contact = () => {
         <div className="col-span-6 mt-6 sm:col-full">
           <button
             className="text-blue-600 mr-4 bg-white hover:bg-gray-100 focus:ring-4 border focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-primary-800"
-            type="submit"
+            type="button"
+            onClick={() => navigate("/dashboard/contacts")}
           >
             Cancel
           </button>

@@ -5,6 +5,7 @@ import {
   useSortBy,
   useGlobalFilter,
   useRowSelect,
+  usePagination,
 } from "react-table";
 
 const Table = ({
@@ -21,16 +22,25 @@ const Table = ({
     headerGroups,
     rows,
     prepareRow,
-    state,
+    state: { pageIndex, pageSize },
+    setPageSize,
     setGlobalFilter,
     selectedFlatRows,
+    page,
+    nextPage,
+    previousPage,
+    canPreviousPage,
+    canNextPage,
   } = useTable(
     {
       columns,
       data,
     },
-    useGlobalFilter, // Enable global filtering
+
+    useGlobalFilter,
+    // Enable global filtering
     useSortBy, // Enable sorting
+    usePagination,
     useRowSelect,
     (hooks) => {
       // Add a custom column for selecting rows
@@ -58,7 +68,10 @@ const Table = ({
     }
   );
 
-  const { globalFilter } = state;
+  const startIndex = pageIndex * pageSize + 1;
+  const endIndex = Math.min((pageIndex + 1) * pageSize, data.length);
+
+  // const { globalFilter } = state;
   useEffect(() => {
     if (searchText.length > 0) {
       setGlobalFilter(searchText);
@@ -66,14 +79,7 @@ const Table = ({
   }, [searchText]);
   return (
     <>
-      <div className="flex items-center justify-between mb-4 sm:mb-6">
-        <form
-          className="sm:pr-3 flex items-center justify-center gap-6"
-          action="#"
-          method="GET"
-        ></form>
-      </div>
-      <div className="relative overflow-x-auto shadow-sm sm:rounded-lg">
+      <div className="relative mt-4 overflow-x-auto shadow-sm sm:rounded-lg">
         <table
           {...getTableProps()}
           className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
@@ -138,7 +144,7 @@ const Table = ({
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
+            {page.map((row) => {
               prepareRow(row);
               return (
                 <tr
@@ -146,7 +152,10 @@ const Table = ({
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
                   {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()} className="p-4">
+                    <td
+                      {...cell.getCellProps()}
+                      className="p-4 max-w-120 text-ellipsis overflow-hidden"
+                    >
                       {cell.column.id == "isActive" ? (
                         cell.value ? (
                           <span className="text-green-700 bg-green-100 p-2 rounded-md">
@@ -162,11 +171,11 @@ const Table = ({
                       )}
                     </td>
                   ))}
-                  <td className="p-4">
+                  <td className="p-4 min-w-80">
                     <button
                       type="button"
                       id="updateProductButton"
-                      className="inline-flex items-center px-3 py-2 text-sm mr-4 mb-2 font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      className="inline items-center px-3 py-2 text-sm mr-4 mb-2 font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                       onClick={() => onEdit(row.original)}
                     >
                       <svg
@@ -188,7 +197,7 @@ const Table = ({
                       type="button"
                       id="deleteProductButton"
                       onClick={() => onDelete(row.original)}
-                      className="inline-flex  items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+                      className="inline  items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
                     >
                       <svg
                         className="w-4 h-4 md:mr-2"
@@ -209,6 +218,88 @@ const Table = ({
             })}
           </tbody>
         </table>
+        <div
+          className="flex flex-col gap-4 md:flex-row
+        justify-between mt-6 p-4"
+        >
+          <div class="flex">
+            <button
+              onClick={() => previousPage()}
+              disabled={!canPreviousPage}
+              className="flex items-center justify-center px-3 h-8 me-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <svg
+                class="w-3.5 h-3.5 me-2 rtl:rotate-180"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 5H1m0 0 4 4M1 5l4-4"
+                />
+              </svg>
+              Previous
+            </button>
+            <button
+              onClick={() => nextPage()}
+              disabled={!canNextPage}
+              className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              Next
+              <svg
+                class="w-3.5 h-3.5 ms-2 rtl:rotate-180"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div className="flex gap-6 items-center">
+            <span class="text-sm text-gray-700 dark:text-gray-400">
+              Showing{" "}
+              <span class="font-semibold text-gray-900 dark:text-white">
+                {startIndex}
+              </span>{" "}
+              to{" "}
+              <span class="font-semibold text-gray-900 dark:text-white">
+                {endIndex}
+              </span>{" "}
+              of{" "}
+              <span class="font-semibold text-gray-900 dark:text-white">
+                {data.length}
+              </span>{" "}
+              contacts
+            </span>
+            <select
+              value={pageSize}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+              }}
+            >
+              {[10, 20, 30, 40, 50].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  {pageSize}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
     </>
   );

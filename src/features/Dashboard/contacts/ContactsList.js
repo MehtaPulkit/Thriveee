@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Select from "../../../elements/Select";
 import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
+import { Bounce, toast } from "react-toastify";
 
 const ContactsList = () => {
   const navigate = useNavigate();
@@ -72,12 +73,38 @@ const ContactsList = () => {
 
   const handleDeleteContact = async () => {
     const res = await deleteContact({ id: rowData._id });
+
     setShowDeletePopup(false);
+    if (res.data) {
+      toast.success("Contact deleted succesfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: localStorage.theme,
+        transition: Bounce,
+      });
+    } else if (res.error) {
+      toast.error("There was some error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: localStorage.theme,
+        transition: Bounce,
+      });
+    }
   };
   const handleRowSelect = (rowData) => {
     // Logic to handle row selection
   };
-  
+
   useEffect(() => {
     if (!data?.entities) return;
 
@@ -99,8 +126,8 @@ const ContactsList = () => {
     <div>
       <Heading heading="All contacts" />
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex flex-col md:items-start md:justify-between md:p-6 xl:p-8">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-6">
+        <div className="flex items-start sm:items-center justify-between">
+          <div className="flex flex-col sm:flex-row gap-6">
             <Select
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
@@ -142,8 +169,8 @@ const ContactsList = () => {
             </label>
             <div className="flex items-center">
               <label
-                for="checked-checkbox"
-                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                htmlFor="checked-checkbox"
+                className="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300"
               >
                 <input
                   id="contact-showInactive"

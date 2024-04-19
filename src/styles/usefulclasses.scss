@@ -43,7 +43,12 @@
 .bg-red-700 {
     background-color: rgb(185 28 28);
 }
-
+.text-ellipsis{
+    text-overflow: ellipsis;
+}
+.max-w-120{
+    max-width: 120px;
+}
 // scrollbar
 ::-webkit-scrollbar {
     width: 5px;

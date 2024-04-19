@@ -11,8 +11,8 @@ const DeleteConfirmationDialog = ({ open, onClose, onConfirm }) => {
         <div className="fixed inset-0 bg-gray-300 opacity-90 dark:bg-gray-700"></div>
         <div className="relative m-auto bg-white rounded-lg p-8 top-100 dark:bg-gray-800 dark:text-gray-200">
           {/* <div className="text-xl font-semibold mb-4">Delete Confirmation</div> */}
-          <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          <svg className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                 </svg>
           <div className="mb-8">Are you sure you want to delete this item?</div>
           <div className="flex justify-center">

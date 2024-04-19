@@ -26,15 +26,12 @@ import {
 } from "./contactApiSlice";
 import { Bounce, toast } from "react-toastify";
 import useAuth from "../../../hooks/useAuth";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const EditContact = () => {
-  const location = useLocation();
-  console.log(location);
-
   const { id } = useAuth();
   const { cID } = useParams();
-  console.log(typeof cID);
   const {
     register,
     handleSubmit,
@@ -54,7 +51,7 @@ const EditContact = () => {
     refetchOnMountOrArgChange: true,
     skip: false,
   });
-
+const navigate= useNavigate();
   const options = ["Customer", "Supplier", "Personal"];
   const designationOptions = ["Company", "Individual"];
   const sameAddress = watch("contactAddIsSame");
@@ -89,33 +86,6 @@ const EditContact = () => {
     mobileNo,
     websiteURL,
   }) => {
-    console.log({
-      id,
-      abn,
-      billingAdd1,
-      billingAdd2,
-      billingPostCode,
-      billingState,
-      billingSuburb,
-      postalAdd1,
-      postalAdd2,
-      postalPostCode,
-      postalSuburb,
-      postalState,
-      phoneNo,
-      contactAddIsSame,
-      contactDesignation,
-      contactId,
-      contactIsActive,
-      companyName,
-      contactNotes,
-      contactType,
-      email,
-      firstName,
-      lastName,
-      mobileNo,
-      websiteURL,
-    });
     //TODO: Add conditional logic
     const res = await updateContact({
       cID: cID,
@@ -160,6 +130,7 @@ const EditContact = () => {
         theme: localStorage.theme,
         transition: Bounce,
       });
+      navigate("/dashboard/contacts")
     } else if (res.error) {
       toast.error("There was some error!", {
         position: "top-center",
@@ -400,7 +371,8 @@ const EditContact = () => {
         <div className="col-span-6 mt-6 sm:col-full">
           <button
             className="text-blue-600 mr-4 bg-white hover:bg-gray-100 focus:ring-4 border focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-primary-800"
-            type="submit"
+            type="button"
+            onClick={()=>navigate("/dashboard/contacts")}
           >
             Cancel
           </button>
