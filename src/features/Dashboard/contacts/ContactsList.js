@@ -10,6 +10,10 @@ import Select from "../../../elements/Select";
 import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
 import { Bounce, toast } from "react-toastify";
+import SearchIcon from "../../../hooks/IconHooks.js/SearchIcon";
+import AddNewBlue from "../../../hooks/IconHooks.js/AddNewWhite";
+import DeleteWhite from "../../../hooks/IconHooks.js/DeleteWhite";
+import UpdateWhite from "../../../hooks/IconHooks.js/UpdateWhite";
 
 const ContactsList = () => {
   const navigate = useNavigate();
@@ -35,22 +39,81 @@ const ContactsList = () => {
     {
       Header: "Name",
       accessor: (row) => row.companyName || row.firstName + row.lastName,
+      needsSorting: true,
+      sortType: (rowA, rowB, columnId) => {
+        const valueA = rowA.values[columnId].toLowerCase();
+        const valueB = rowB.values[columnId].toLowerCase();
+        return valueA.localeCompare(valueB);
+      },
+      // Custom sorting
     },
     {
       Header: "Contact ID",
       accessor: "contactId",
+      needsSorting: true,
+      sortType: (rowA, rowB, columnId) => {
+        const valueA = rowA.values[columnId].toLowerCase();
+        const valueB = rowB.values[columnId].toLowerCase();
+        return valueA.localeCompare(valueB);
+      },
     },
     {
       Header: "Contact no",
       accessor: (row) => row.phoneNo || row.mobileNo,
+      needsSorting: true,
     },
     {
       Header: "Email",
       accessor: "email",
+      needsSorting: true,
+      sortType: (rowA, rowB, columnId) => {
+        const valueA = rowA.values[columnId].toLowerCase();
+        const valueB = rowB.values[columnId].toLowerCase();
+        return valueA.localeCompare(valueB);
+      },
     },
     {
       Header: "Status",
       accessor: "isActive",
+      needsSorting: true,
+      Cell: ({ value }) => (
+        <>
+          {value ? (
+            <span className="text-green-700 bg-green-100 p-2 rounded-md dark:bg-green-800 dark:text-gray-100">
+              Active
+            </span>
+          ) : (
+            <span className="bg-red-100 text-red-700 p-2 rounded-md dark:bg-red-800 dark:text-gray-100">
+              Inactive
+            </span>
+          )}
+        </>
+      ),
+    },
+    {
+      Header: "Actions",
+      minWidth: "320px",
+      Cell: ({ row }) => (
+        <>
+          <button
+            type="button"
+            id="updateProductButton"
+            className="inline items-center px-3 py-2 text-sm mr-4 mb-2 font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            onClick={() => handleEdit(row.original)}
+          >
+            <UpdateWhite/>
+          </button>
+
+          <button
+            type="button"
+            id="deleteProductButton"
+            onClick={() => handleDelete(row.original)}
+            className="inline  items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+          >
+            <DeleteWhite/>
+          </button>
+        </>
+      ),
     },
   ];
 
@@ -129,21 +192,7 @@ const ContactsList = () => {
               Search
               <div className="relative mt-1">
                 <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    />
-                  </svg>
+                  <SearchIcon />
                 </div>
                 <input
                   type="text"
@@ -173,24 +222,11 @@ const ContactsList = () => {
             <span className="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
               Add new contact
             </span>
-            <svg
-              className="w-8 h-8 text-blue-600 md:hidden"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fillRule="evenodd"
-                d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <AddNewBlue />
           </Link>
         </div>
-
+      </div>
+      <div className="p-4 mt-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex flex-col md:items-start md:justify-between md:p-6 xl:p-8">
         {tableData && selectedOption.value && (
           <Table
             columns={columns}
@@ -202,10 +238,10 @@ const ContactsList = () => {
             page="contact"
             searchText={searchText}
             selectionRequired={false}
+            entriesName="contacts"
           />
         )}
       </div>
-
       <DeleteConfirmationDialog
         open={showDeletePopup}
         onClose={() => setShowDeletePopup(!showDeletePopup)}

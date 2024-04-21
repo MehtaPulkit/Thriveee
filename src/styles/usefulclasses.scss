@@ -58,7 +58,12 @@
     max-width: 120px;
 }
 
-// scrollbar
+.disabled {
+    &\:cursor-not-allowed:disabled{
+        cursor: not-allowed;
+    }
+}
+
 ::-webkit-scrollbar {
     width: 5px;
 }
