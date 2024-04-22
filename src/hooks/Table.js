@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect} from "react";
 import {
   useTable,
   useSortBy,
@@ -11,6 +11,7 @@ import LeftArrow from "./IconHooks.js/LeftArrow";
 import RightArrow from "./IconHooks.js/RightArrow";
 import SortDesc from "./IconHooks.js/SortDesc";
 import SortAesc from "./IconHooks.js/SortAesc";
+import Folders from "./IconHooks.js/Folders";
 
 const Table = ({
   columns,
@@ -97,7 +98,6 @@ const Table = ({
                   >
                     <div className="flex items-center gap-2">
                       {column.render("Header")}
-                      {console.log(column)}
                       {column.needsSorting && (
                         <span>
                           {column.isSorted ? (
@@ -146,7 +146,7 @@ const Table = ({
         >
           <div className="flex">
             <button
-            onClick={() => previousPage()}
+              onClick={() => previousPage()}
               disabled={!canPreviousPage}
               className="flex items-center justify-center px-3 h-8 me-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:cursor-not-allowed"
             >
@@ -197,23 +197,7 @@ const Table = ({
       ) : (
         <div className="flex flex-col items-center justify-center p-4">
           <Subheading subheading="No data available" />
-          <svg
-            className="w-[48px] h-[48px] text-gray-800 dark:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 11H4m15.5 5a.5.5 0 0 0 .5-.5V8a1 1 0 0 0-1-1h-3.75a1 1 0 0 1-.829-.44l-1.436-2.12a1 1 0 0 0-.828-.44H8a1 1 0 0 0-1 1M4 9v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1h-3.75a1 1 0 0 1-.829-.44L9.985 8.44A1 1 0 0 0 9.157 8H5a1 1 0 0 0-1 1Z"
-            />
-          </svg>
+          <Folders />
         </div>
       )}
     </>

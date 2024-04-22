@@ -26,13 +26,6 @@ const Password = () => {
   }) => {
     if (newpassword != confirmpassword) {
       return toast.warn("New and confirm password must match", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: localStorage.theme,
         transition: Bounce,
       });

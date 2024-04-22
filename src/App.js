@@ -24,7 +24,6 @@ import { ROLES } from "./config/roles";
 import ContactsList from "./features/dashboard/contacts/ContactsList";
 import Contact from "./features/dashboard/contacts/Contact";
 import ContactsLayout from "./features/dashboard/contacts/ContactsLayout";
-import EditContact from "./features/dashboard/contacts/EditContact";
 
 function App() {
   return (
@@ -32,7 +31,7 @@ function App() {
       <div className="bg-white font-serif dark:bg-black ">
         <ToastContainer
           position="top-center"
-          autoClose={5000}
+          autoClose={3000}
           hideProgressBar={false}
           newestOnTop
           closeOnClick
@@ -74,7 +73,7 @@ function App() {
                   <Route path="contacts" element={<ContactsLayout />}>
                     <Route index element={<ContactsList />} />
                     <Route path="create" element={<Contact />} />
-                    <Route path="edit/:cID" element={<EditContact />} />
+                    <Route path="edit/:cID" element={<Contact />} />
                   </Route>
                 </Route>
               </Route>
