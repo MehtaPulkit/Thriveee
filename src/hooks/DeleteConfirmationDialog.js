@@ -1,5 +1,5 @@
 import React from "react";
-import AlertIcon from "./IconHooks.js/AlertIcon";
+import AlertIcon from "./IconHooks/AlertIcon";
 import CancelBtn from "../elements/CancelBtn";
 import DeleteBtn from "../elements/DeleteBtn";
 

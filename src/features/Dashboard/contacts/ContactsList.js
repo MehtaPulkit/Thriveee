@@ -10,10 +10,12 @@ import Select from "../../../elements/Select";
 import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
 import { Bounce, toast } from "react-toastify";
-import SearchIcon from "../../../hooks/IconHooks.js/SearchIcon";
-import AddNewBlue from "../../../hooks/IconHooks.js/AddNewWhite";
-import DeleteWhite from "../../../hooks/IconHooks.js/DeleteWhite";
-import UpdateWhite from "../../../hooks/IconHooks.js/UpdateWhite";
+import AddNewBlue from "../../../hooks/IconHooks/AddNewWhite";
+import {
+  MagnifyingGlassIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 
 const ContactsList = () => {
   const navigate = useNavigate();
@@ -101,7 +103,7 @@ const ContactsList = () => {
             className="inline items-center px-3 py-2 text-sm mr-4 mb-2 font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             onClick={() => handleEdit(row.original)}
           >
-            <UpdateWhite/>
+            <PencilSquareIcon className="w-4 h-4 text-color-white" />
           </button>
 
           <button
@@ -110,7 +112,7 @@ const ContactsList = () => {
             onClick={() => handleDelete(row.original)}
             className="inline  items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
           >
-            <DeleteWhite/>
+            <TrashIcon className="w-4 h-4 text-color-white" />
           </button>
         </>
       ),
@@ -192,7 +194,7 @@ const ContactsList = () => {
               Search
               <div className="relative mt-1">
                 <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                  <SearchIcon />
+                  <MagnifyingGlassIcon className="w-5 h-5" />
                 </div>
                 <input
                   type="text"

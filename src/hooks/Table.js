@@ -7,11 +7,11 @@ import {
   usePagination,
 } from "react-table";
 import Subheading from "./Subheading";
-import LeftArrow from "./IconHooks.js/LeftArrow";
-import RightArrow from "./IconHooks.js/RightArrow";
-import SortDesc from "./IconHooks.js/SortDesc";
-import SortAesc from "./IconHooks.js/SortAesc";
-import Folders from "./IconHooks.js/Folders";
+import LeftArrow from "./IconHooks/LeftArrow";
+import RightArrow from "./IconHooks/RightArrow";
+import SortDesc from "./IconHooks/SortDesc";
+import SortAesc from "./IconHooks/SortAesc";
+import Folders from "./IconHooks/Folders";
 
 const Table = ({
   columns,

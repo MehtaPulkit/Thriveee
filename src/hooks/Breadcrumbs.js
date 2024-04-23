@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import HomeIcon from "./IconHooks.js/HomeIcon";
-import RightArrowSM from "./IconHooks.js/RightArrowSM";
+import { ChevronRightIcon, HomeIcon } from "@heroicons/react/24/solid";
 
 const Breadcrumbs = ({ breadcrumbList }) => {
   return (
@@ -15,12 +14,12 @@ const Breadcrumbs = ({ breadcrumbList }) => {
                   to={bc?.link}
                   className="inline-flex items-center text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white"
                 >
-                  <HomeIcon/>
+                  <HomeIcon width={18} />
                   {bc?.bcName}
                 </Link>
               ) : (
                 <div className="flex items-center">
-                  <RightArrowSM/>
+                  <ChevronRightIcon width={18} />
                   <Link
                     to={bc?.link}
                     className="ml-1 text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-300 dark:hover:text-white"
