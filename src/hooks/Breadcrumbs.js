@@ -18,7 +18,7 @@ const Breadcrumbs = ({ breadcrumbList }) => {
                   {bc?.bcName}
                 </Link>
               ) : (
-                <div className="flex items-center">
+                <div className="flex items-center text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white">
                   <ChevronRightIcon width={18} />
                   <Link
                     to={bc?.link}

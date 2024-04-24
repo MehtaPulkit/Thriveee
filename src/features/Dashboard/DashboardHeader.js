@@ -333,7 +333,7 @@ const DashboardHeader = ({ menuOpen, setMenuOpen }) => {
                       flex justify-center items-center 
                       "
                       >
-                        {firstname.split("")[0]} {lastname.split("")[0]}
+                        {firstname?.split("")[0]} {lastname?.split("")[0]}
                       </div>
                     ) : (
                       <img

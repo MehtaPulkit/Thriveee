@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useUpdateUserNotificationsMutation } from "../user/userApiSlice.js";
+import React, { useEffect } from "react";
+import {
+  useUpdateUserNotificationsMutation,
+} from "../user/userApiSlice.js";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../../hooks/useAuth.js";
 import { Bounce, toast } from "react-toastify";
-import { useGetNotificationPreferenceQuery } from "./userNotificationApiSlice.js";
 import Toggle from "../../../../elements/Toggle.js";
 import RadioGrp from "../../../../elements/RadioGrp.js";
+import SubmitBtn from "../../../../elements/SubmitBtn.js";
+import { useRefreshMutation } from "../../../auth/authApiSlice.js";
 const notificationData = [
   {
     id: "Type",
@@ -20,27 +23,20 @@ const notificationData = [
 ];
 const Notification = () => {
   const { id, notificationPreference } = useAuth();
-  const [notifications, setNotifications] = useState([]);
   const options = ["Email", "Mobile", "Both"];
 
   const [updateUserNotifications, { isLoading, isSuccess, isError, error }] =
     useUpdateUserNotificationsMutation();
-
-  const {
-    data: notificationPrefData,
-    isFetching,
-    isLoading: notiPrefIsLoading,
-  } = useGetNotificationPreferenceQuery(notificationPreference, {
-    refetchOnMountOrArgChange: true,
-    skip: false,
-  });
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {},
+    defaultValues: {
+      typeNotification: notificationPreference.typeNotification,
+      newsletterNotification: notificationPreference.newsletterNotification,
+    },
   });
   const handleNotificationPreference = async ({
     typeNotification,
@@ -64,14 +60,6 @@ const Notification = () => {
     }
   };
 
-  useEffect(() => {
-    if (notificationPrefData) {
-      reset({
-        typeNotification: notificationPrefData.typeNotification,
-        newsletterNotification: notificationPrefData.newsletterNotification,
-      });
-    }
-  }, [notificationPrefData]);
   return (
     <div className="grid grid-cols-1 px-4 xl:grid-cols-2 xl:gap-4">
       <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 xl:mb-0">
@@ -124,12 +112,7 @@ const Notification = () => {
               ))}
             </div>
             <div className="mt-6">
-              <button
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-primary-800"
-                type="submit"
-              >
-                Save all
-              </button>
+              <SubmitBtn text="Save" />
             </div>
           </form>
         </div>

@@ -1,10 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { Link } from "react-router-dom";
-import { useGetAddressQuery, useGetAddressesQuery } from "./address/addressApiSlice";
 import { backendURL } from "../../../config/connection";
-import { useGetNotificationPreferenceQuery } from "./notification/userNotificationApiSlice";
-
+import { useRefreshMutation } from "../../auth/authApiSlice";
 const AccountSummary = () => {
   const {
     firstname,
@@ -18,29 +16,20 @@ const AccountSummary = () => {
     notificationPreference,
   } = useAuth();
 
-  const  {
-    data: postalAdd,
-    isLoading: postalAddIsLoading,
-  } = useGetAddressQuery(postalAddress, {
-    refetchOnMountOrArgChange: true,
-    skip: false,
-  });
-  const {
-    data: currentAdd,
-    isLoading: currentAddIsLoading,
-  }  = useGetAddressQuery(currentAddress, {
-    refetchOnMountOrArgChange: true,
-    skip: false,
-  });
-
-  const {
-    data: notificationPrefData,
-    isFetching,
-    isLoading: notiPrefIsLoading,
-  } = useGetNotificationPreferenceQuery(notificationPreference, {
-    refetchOnMountOrArgChange: true,
-    skip: false,
-  });
+  const [
+    refresh,
+    {
+      isUninitialized,
+      isLoading: refreshIsLoading,
+      isSuccess,
+      isError: refreshIsError,
+      error,
+    },
+  ] = useRefreshMutation();
+  
+  useEffect(() => {
+    refresh();
+  }, []);
   return (
     <div>
       <h1 className="mb-3 text-2xl font-bold text-gray-900 sm:text-3xl sm:leading-none sm:tracking-tight dark:text-white">
@@ -90,17 +79,17 @@ const AccountSummary = () => {
             <div className="text-gray-500 dark:text-gray-400">
               <b>Current</b>:{" "}
               <span>
-                {currentAdd ? (
+                {currentAddress ? (
                   <>
-                    {currentAdd.addressLine1 +
+                    {currentAddress.addressLine1 +
                       " " +
-                      currentAdd.addressLine2 +
+                      currentAddress.addressLine2 +
                       " " +
-                      currentAdd.suburb +
+                      currentAddress.suburb +
                       " " +
-                      currentAdd.state +
+                      currentAddress.state +
                       " " +
-                      currentAdd.postalCode}
+                      currentAddress.postalCode}
                   </>
                 ) : (
                   <>Not provided</>
@@ -111,17 +100,17 @@ const AccountSummary = () => {
               <b>Postal</b>:{" "}
               <span>
                 {" "}
-                {postalAdd ? (
+                {postalAddress ? (
                   <>
-                    {postalAdd.addressLine1 +
+                    {postalAddress.addressLine1 +
                       " " +
-                      postalAdd.addressLine2 +
+                      postalAddress.addressLine2 +
                       " " +
-                      postalAdd.suburb +
+                      postalAddress.suburb +
                       " " +
-                      postalAdd.state +
+                      postalAddress.state +
                       " " +
-                      postalAdd.postalCode}
+                      postalAddress.postalCode}
                   </>
                 ) : (
                   <>Not provided</>
@@ -138,7 +127,9 @@ const AccountSummary = () => {
               Subscription
             </h2>
           </Link>
-          <div className="text-gray-500 dark:text-gray-400"><b>Free</b></div>
+          <div className="text-gray-500 dark:text-gray-400">
+            <b>Free</b>
+          </div>
           <div className="text-gray-500 dark:text-gray-400">
             <b>Expirying</b>: 31/01/2026
           </div>
@@ -164,15 +155,17 @@ const AccountSummary = () => {
           </Link>
           <div className="text-gray-500 dark:text-gray-400">
             <b> Via</b>:{" "}
-            {notificationPrefData?.typeNotification === "Email"
+            {notificationPreference?.typeNotification === "Email"
               ? "Email"
-              : notificationPrefData?.typeNotification === "Mobile"
+              : notificationPreference?.typeNotification === "Mobile"
               ? "Mobile"
-              : notificationPrefData?.typeNotification === "Both"?"Email & Mobile":"Not selected"}
+              : notificationPreference?.typeNotification === "Both"
+              ? "Email & Mobile"
+              : "Not selected"}
           </div>
           <div className="text-gray-500 dark:text-gray-400">
             <b>Newsletter</b>:{" "}
-            {notificationPrefData?.newsletterNotification ? "On" : "Off"}
+            {notificationPreference?.newsletterNotification ? "On" : "Off"}
           </div>
         </div>
       </div>

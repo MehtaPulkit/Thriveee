@@ -1,21 +1,13 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Input from "../../../../elements/Input";
-import { useGetAddressQuery } from "./addressApiSlice";
 import useAuth from "../../../../hooks/useAuth";
 import { useUpdateUserAddressMutation } from "../user/userApiSlice";
 import { Bounce, toast } from "react-toastify";
+import SubmitBtn from "../../../../elements/SubmitBtn";
 
-const UserAddress = ({ type, addressId }) => {
-  const { id } = useAuth();
-  const {
-    data: address,
-    isFetching,
-    isLoading: addressIsLoading,
-  } = useGetAddressQuery(addressId, {
-    refetchOnMountOrArgChange: true,
-    skip: false,
-  });
+const UserAddress = ({ type, address }) => {
+  const { id} = useAuth();
 
   const {
     register,
@@ -165,12 +157,7 @@ const UserAddress = ({ type, addressId }) => {
           />
 
           <div className="col-span-6 sm:col-full">
-            <button
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-primary-800"
-              type="submit"
-            >
-              Save all
-            </button>
+            <SubmitBtn text="Save" />
           </div>
         </div>
       </form>

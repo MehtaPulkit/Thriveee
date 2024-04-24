@@ -2,8 +2,6 @@ import { store } from "../../app/store";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { userApiSlice } from "../dashboard/account/user/userApiSlice";
-import { addressApiSlice } from "../dashboard/account/address/addressApiSlice";
-
 const Prefetch = () => {
   useEffect(() => {
     // store.dispatch(

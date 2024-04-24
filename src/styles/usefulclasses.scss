@@ -59,8 +59,13 @@
 }
 
 .disabled {
-    &\:cursor-not-allowed:disabled{
+    &\:cursor-not-allowed:disabled {
         cursor: not-allowed;
+    }
+
+    &\:bg-red-300:disabled {
+        --tw-bg-opacity: 1;
+        background-color: rgb(252 165 165 / var(--tw-bg-opacity));
     }
 }
 
