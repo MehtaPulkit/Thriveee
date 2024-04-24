@@ -211,7 +211,6 @@ const Contact = () => {
       });
     }
   }, [data]);
-
   if (contactIsLoading && cID) {
     return <LoadingMsg />;
   }

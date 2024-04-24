@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import {
   useTable,
   useSortBy,
@@ -7,11 +7,13 @@ import {
   usePagination,
 } from "react-table";
 import Subheading from "./Subheading";
-import LeftArrow from "./IconHooks/LeftArrow";
-import RightArrow from "./IconHooks/RightArrow";
 import SortDesc from "./IconHooks/SortDesc";
 import SortAesc from "./IconHooks/SortAesc";
-import Folders from "./IconHooks/Folders";
+import { FolderOpenIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowLongLeftIcon,
+  ArrowLongRightIcon,
+} from "@heroicons/react/24/solid";
 
 const Table = ({
   columns,
@@ -150,7 +152,7 @@ const Table = ({
               disabled={!canPreviousPage}
               className="flex items-center justify-center px-3 h-8 me-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:cursor-not-allowed"
             >
-              <LeftArrow />
+              <ArrowLongLeftIcon className="w-6 mx-1" />
               Previous
             </button>
             <button
@@ -159,7 +161,7 @@ const Table = ({
               className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:cursor-not-allowed"
             >
               Next
-              <RightArrow />
+              <ArrowLongRightIcon className="w-6 mx-1" />
             </button>
           </div>
 
@@ -197,7 +199,7 @@ const Table = ({
       ) : (
         <div className="flex flex-col items-center justify-center p-4">
           <Subheading subheading="No data available" />
-          <Folders />
+          <FolderOpenIcon className="w-11 h-11" />
         </div>
       )}
     </>
