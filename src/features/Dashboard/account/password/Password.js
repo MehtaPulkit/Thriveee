@@ -6,14 +6,14 @@ import {
   MinPasswordLength,
 } from "../../../../config/minMax";
 import useAuth from "../../../../hooks/useAuth";
-import { useUpdateUserMutation } from "../user/userApiSlice";
+import { useUpdatePasswordMutation } from "../user/userApiSlice";
 import { Bounce, toast } from "react-toastify";
 import SubmitBtn from "../../../../elements/SubmitBtn";
 
 const Password = () => {
-  const { id, email } = useAuth();
-  const [updateUser, { isLoading, isSuccess, isError, error }] =
-    useUpdateUserMutation();
+  const { id } = useAuth();
+  const [updatePassword, { isLoading, isSuccess, isError, error }] =
+    useUpdatePasswordMutation();
   const {
     register,
     handleSubmit,
@@ -32,9 +32,8 @@ const Password = () => {
       });
     }
 
-    const res = await updateUser({
+    const res = await updatePassword({
       id: id,
-      email: email,
       currentPassword: currentpassword,
       password: newpassword,
     });

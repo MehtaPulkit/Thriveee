@@ -100,6 +100,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [{ type: "User", id: arg.id }],
     }),
+    updatePassword: builder.mutation({
+      query: (data) => ({
+        url: "/users/updatePassword",
+        method: "PATCH",
+        body: {
+          ...data,
+        },
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: "User", id: arg.id }],
+    }),
     deleteUser: builder.mutation({
       query: ({ id }) => ({
         url: `/users`,
@@ -109,10 +119,10 @@ export const userApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: (result, error, arg) => [{ type: "User", id: arg.id }],
     }),
     deleteProfilePicture: builder.mutation({
-      query: ({filename}) => ({
+      query: ({ filename }) => ({
         url: `/users/deleteImage`,
         method: "DELETE",
-        body: {filename},
+        body: { filename },
       }),
       invalidatesTags: (result, error, arg) => [{ type: "User", id: arg.id }],
     }),
@@ -128,6 +138,7 @@ export const {
   useUpdateUserMutation,
   useUpdateUserAddressMutation,
   useUpdateUserNotificationsMutation,
+  useUpdatePasswordMutation,
   useDeleteUserMutation,
   useDeleteProfilePictureMutation,
 } = userApiSlice;
