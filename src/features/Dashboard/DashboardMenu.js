@@ -1,5 +1,8 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { ChevronDownIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/solid";
+import {
+  ChevronDownIcon,
+  ClipboardDocumentListIcon,
+} from "@heroicons/react/24/solid";
 import {
   ChartPieIcon,
   ClipboardDocumentIcon,
@@ -199,14 +202,13 @@ const DashboardMenu = ({ isOverlay, menuOpen, setMenuOpen }) => {
             <div className="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
               <ul className="pb-2 space-y-2">
                 <li>
-                  {/* Search */}
                   <form action="#" method="GET" className="">
                     <label htmlFor="mobile-search" className="sr-only">
                       Search
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <MagnifyingGlassIcon className="w-5 h-5" />
+                        <MagnifyingGlassIcon className={menuIconClassName} />
                       </div>
                       <input
                         type="text"
@@ -244,7 +246,7 @@ const DashboardMenu = ({ isOverlay, menuOpen, setMenuOpen }) => {
                         <Link to={item.link}> {item.name}</Link>
                       </span>
                       {item.submenu.length > 0 && (
-                        <ChevronDownIcon className="w-5 h-5"/>
+                        <ChevronDownIcon className="w-5 h-5" />
                       )}
                     </button>
                     {item.submenu.length > 0 && (

@@ -30,6 +30,7 @@ const ProfilePic = ({ firstName, lastName, profilePicture }) => {
       error,
     },
   ] = useRefreshMutation();
+  
   const {
     register,
     handleSubmit,
@@ -109,7 +110,7 @@ const ProfilePic = ({ firstName, lastName, profilePicture }) => {
 
                     <CancelBtn handleClick={() => setImage(null)} />
                   </div>
-                  <p className="text-sm">{image?.name}</p>
+                  <p className="text-sm mt-2 text-gray-500 dark:text-gray-400">{image?.name}</p>
                 </div>
               )}
             </div>
