@@ -2,6 +2,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
   ClipboardDocumentListIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/solid";
 import {
   ChartPieIcon,
@@ -145,6 +146,20 @@ const DashboardMenu = ({ isOverlay, menuOpen, setMenuOpen }) => {
           id: "menu81",
           name: "Create",
           link: "contacts/create",
+          icon: "",
+        },
+      ],
+    },
+    {
+      id: "menu9",
+      name: "Quotes",
+      link: "quotes",
+      icon: <DocumentTextIcon className={menuIconClassName} />,
+      submenu: [
+        {
+          id: "menu91",
+          name: "Create",
+          link: "quotes/create",
           icon: "",
         },
       ],

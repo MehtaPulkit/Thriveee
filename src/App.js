@@ -24,6 +24,9 @@ import { ROLES } from "./config/roles";
 import ContactsList from "./features/dashboard/contacts/ContactsList";
 import Contact from "./features/dashboard/contacts/Contact";
 import ContactsLayout from "./features/dashboard/contacts/ContactsLayout";
+import QuotesLayout from "./features/dashboard/quotes/QuotesLayout";
+import Quote from "./features/dashboard/quotes/Quote";
+import QuotesList from "./features/dashboard/quotes/QuotesList";
 
 function App() {
   return (
@@ -74,6 +77,11 @@ function App() {
                     <Route index element={<ContactsList />} />
                     <Route path="create" element={<Contact />} />
                     <Route path="edit/:cID" element={<Contact />} />
+                  </Route>
+                  <Route path="quotes" element={<QuotesLayout />}>
+                    <Route index element={<QuotesList />} />
+                    <Route path="create" element={<Quote />} />
+                    <Route path="edit/:cID" element={<Quote />} />
                   </Route>
                 </Route>
               </Route>
