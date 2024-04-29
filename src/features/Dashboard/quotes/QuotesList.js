@@ -6,7 +6,7 @@ import Table from "../../../hooks/Table";
 //   useGetQuotesQuery,
 // } from "./quoteApiSlice";
 import { useNavigate } from "react-router-dom";
-import Select from "../../../elements/SelectFilter";
+import SelectFilter from "../../../elements/SelectFilter";
 import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
 import { Bounce, toast } from "react-toastify";
@@ -211,7 +211,7 @@ const QuotesList = () => {
           </Link>
         </div>
         <div date-rangepicker className="flex flex-col gap-4 md:flex-row">
-          <Select
+          <SelectFilter
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
             options={quoteStatusOptions}

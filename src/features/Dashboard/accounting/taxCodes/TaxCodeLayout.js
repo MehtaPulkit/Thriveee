@@ -24,8 +24,8 @@ const TaxCodeLayout = () => {
       id: "bc3",
       type: "branch",
       index: 2,
-      bcName: "Tax-Codes",
-      link: "/dashboard/accounting/tax-Codes",
+      bcName: "Tax codes",
+      link: "/dashboard/accounting/tax-codes",
       isDisabled: false,
     },
   ];

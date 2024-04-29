@@ -6,7 +6,7 @@ import {
   useGetContactsQuery,
 } from "./contactApiSlice";
 import { useNavigate } from "react-router-dom";
-import Select from "../../../elements/SelectFilter";
+import SelectFilter from "../../../elements/SelectFilter";
 import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
 import { Bounce, toast } from "react-toastify";
@@ -179,7 +179,7 @@ const ContactsList = () => {
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex flex-col md:items-start md:justify-between md:p-6 xl:p-8">
         <div className="flex items-start sm:items-center justify-between">
           <div className="flex flex-col sm:flex-row gap-6">
-            <Select
+            <SelectFilter
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
               options={contactTypeOptions}

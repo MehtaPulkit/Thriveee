@@ -9,10 +9,13 @@ import {
 import Heading from "../../../../hooks/Heading";
 import Subheading from "../../../../hooks/Subheading";
 import { MaxNameLength, MinNameLength } from "../../../../config/minMax";
-import { namePattern } from "../../../../config/regexPatterns";
+import { namePattern, taxCodePattern } from "../../../../config/regexPatterns";
 import CancelBtn from "../../../../elements/CancelBtn";
 import SubmitBtn from "../../../../elements/SubmitBtn";
 import Input from "../../../../elements/Input";
+import SimpleSelect from "../../../../elements/SimpleSelect";
+import { taxType } from "../../../../config/taxType";
+import ComplexSelect from "../../../../elements/ComplexSelect";
 
 const TaxCode = () => {
   const { id } = useAuth();
@@ -42,7 +45,7 @@ const TaxCode = () => {
     refetchOnMountOrArgChange: true,
     skip: !tcID,
   });
-
+  const watchTaxType = watch("taxType");
   const [addNewTaxCode, { isLoading, isError, isSuccess }] =
     useAddNewTaxCodeMutation();
 
@@ -96,6 +99,7 @@ const TaxCode = () => {
               placeholder=""
               key="taxCode-taxCode"
               type="text"
+              pattern={taxCodePattern}
               errors={errors}
               register={register}
               required={true}
@@ -120,12 +124,81 @@ const TaxCode = () => {
               errors={errors}
               register={register}
             />
+            <SimpleSelect
+              id="taxCode-taxtype"
+              label="Tax type"
+              options={taxType}
+              register={register}
+              errors={errors}
+              name="taxType"
+            />
+            {taxType == "Import Duty" &&
+              {
+                /* <ComplexSelect
+             id="taxCode-AccruedDuty"
+             label="Linked account for accrued duty"
+             options={AccruedDuty}
+             register={register}
+             errors={errors}
+             name="AccruedDuty"
+            /> */
+              /* <ComplexSelect
+             id="taxCode-ImportAgent"
+             label="Linked contact for import agent"
+             options={ImportAgent}
+             register={register}
+             errors={errors}
+             name="ImportAgent"
+            /> */}
+              
+              }
+            {/* <ComplexSelect
+             id="taxCode-taxPaid"
+             label="Tax type"
+             options={taxPaid}
+             register={register}
+             errors={errors}
+             name="taxPaid"
+            /> */}
+            {/* <ComplexSelect
+             id="taxCode-linkedContact"
+             label="Linked contact for tax authority"
+             options={linkedContact}
+             register={register}
+             errors={errors}
+             name="linkedContact"
+            /> */}
+            {/* <ComplexSelect
+             id="taxCode-WithholdingCrAccount"
+             label="Tax type"
+             options={Withholding}
+             register={register}
+             errors={errors}
+             name="WithholdingCrAccount"
+            /> */}
+            {/* <ComplexSelect
+             id="taxCode-WithholdingPyAccount"
+             label="Tax type"
+             options={WithholdingPyAccount}
+             register={register}
+             errors={errors}
+             name="WithholdingPyAccount"
+            /> */}
             
+
+            {/* <ComplexSelect
+             id="taxCode-LinkedAccTaxPaid"
+             label="Linked account for tax paid"
+             options={LinkedAccTaxPaid}
+             register={register}
+             errors={errors}
+             name="LinkedAccTaxPaid"
+            /> */}
           </div>
         </div>
 
         <div className="col-span-6 mt-6 sm:col-full">
-          <CancelBtn handleClick={() => navigate("/dashboard/contacts")} />
+          <CancelBtn handleClick={() => navigate("/dashboard/accounting/tax-codes")} />
           <SubmitBtn text={tcID ? "Update" : "Save"} />
         </div>
       </form>

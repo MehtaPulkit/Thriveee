@@ -31,6 +31,8 @@ import TaxCodeLayout from "./features/dashboard/accounting/taxCodes/TaxCodeLayou
 import TaxCodeList from "./features/dashboard/accounting/taxCodes/TaxCodeList";
 import TaxCode from "./features/dashboard/accounting/taxCodes/TaxCode";
 import AccountingLayout from "./features/dashboard/accounting/AccountingLayout";
+import TxAccountLayout from "./features/dashboard/accounting/taxAccounts/TxAccountLayout";
+import TxAccount from "./features/dashboard/accounting/taxAccounts/TxAccount";
 
 function App() {
   return (
@@ -92,6 +94,11 @@ function App() {
                       <Route index element={<TaxCodeList />} />
                       <Route path="create" element={<TaxCode />} />
                       <Route path="edit/:tcID" element={<TaxCode />} />
+                    </Route>
+                    <Route path="tax-accounts" element={<TxAccountLayout />}>
+                      <Route index element={<TxAccountLayout />} />
+                      <Route path="create" element={<TxAccount />} />
+                      <Route path="edit/:tcID" element={<TxAccount />} />
                     </Route>
                   </Route>
                 </Route>
