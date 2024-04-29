@@ -83,16 +83,11 @@ const DashboardMenu = ({ isOverlay, menuOpen, setMenuOpen }) => {
         },
         {
           id: "menu33",
-          name: "General Journals",
-          link: "accounting/general-journals",
+          name: "Tax Codes",
+          link: "accounting/tax-codes",
           icon: "",
         },
-        {
-          id: "menu34",
-          name: "General Journals",
-          link: "accounting/general-journals",
-          icon: "",
-        },
+        
       ],
     },
     {

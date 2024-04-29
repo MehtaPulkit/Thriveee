@@ -199,7 +199,7 @@ const Table = ({
       ) : (
         <div className="flex flex-col items-center justify-center p-4">
           <Subheading subheading="No data available" />
-          <FolderOpenIcon className="w-11 h-11" />
+          <FolderOpenIcon className="w-11 h-11 dark:text-gray-400" />
         </div>
       )}
     </>

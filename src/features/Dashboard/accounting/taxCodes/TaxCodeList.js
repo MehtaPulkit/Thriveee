@@ -1,47 +1,28 @@
 import React, { useEffect, useState } from "react";
-import Heading from "../../../hooks/Heading";
-import Table from "../../../hooks/Table";
+import Heading from "../../../../hooks/Heading";
+import AddNewBlue from "../../../../hooks/IconHooks/AddNewWhite";
+import { Link, useNavigate } from "react-router-dom";
+import Table from "../../../../hooks/Table";
+import DeleteConfirmationDialog from "../../../../hooks/DeleteConfirmationDialog";
+import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import {
-  useDeleteContactMutation,
-  useGetContactsQuery,
-} from "./contactApiSlice";
-import { useNavigate } from "react-router-dom";
-import Select from "../../../elements/SelectFilter";
-import { Link } from "react-router-dom";
-import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
+  useDeleteTaxCodeMutation,
+  useGetTaxCodesQuery,
+} from "./taxCodeApiSlice";
 import { Bounce, toast } from "react-toastify";
-import AddNewBlue from "../../../hooks/IconHooks/AddNewWhite";
-import {
-  MagnifyingGlassIcon,
-  PencilSquareIcon,
-  TrashIcon,
-} from "@heroicons/react/24/solid";
 
-const ContactsList = () => {
+const TaxCodeList = () => {
   const navigate = useNavigate();
-  const { data, isError, isLoading, isFetching, isSuccess } =
-    useGetContactsQuery();
-  const [selectedOption, setSelectedOption] = useState({
-    value: "All",
-    name: "All",
-  });
-  const contactTypeOptions = [
-    { value: "All", name: "All" },
-    { value: "Customer", name: "Customer" },
-    { value: "Personal", name: "Personal" },
-    { value: "Supplier", name: "Supplier" },
-  ];
-
-  const [tableData, setTableData] = useState([]);
-  const [searchText, setSearchText] = useState("");
-  const [showInactive, setShowInactive] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [rowData, setRowData] = useState({});
+  const [tableData, setTableData] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const columns = [
     {
-      Header: "Name",
-      accessor: (row) => row.companyName || row.firstName + row.lastName,
-      needsSorting: true,
+      Header: "Tax code",
+      accessor: "taxCode",
+      needsSorting: false,
       sortType: (rowA, rowB, columnId) => {
         const valueA = rowA.values[columnId].toLowerCase();
         const valueB = rowB.values[columnId].toLowerCase();
@@ -50,9 +31,9 @@ const ContactsList = () => {
       // Custom sorting
     },
     {
-      Header: "Contact ID",
-      accessor: "contactId",
-      needsSorting: true,
+      Header: "Description",
+      accessor: "description",
+      needsSorting: false,
       sortType: (rowA, rowB, columnId) => {
         const valueA = rowA.values[columnId].toLowerCase();
         const valueB = rowB.values[columnId].toLowerCase();
@@ -60,14 +41,14 @@ const ContactsList = () => {
       },
     },
     {
-      Header: "Contact no",
-      accessor: (row) => row.phoneNo || row.mobileNo,
-      needsSorting: true,
+      Header: "Tax Type",
+      accessor: "taxType",
+      needsSorting: false,
     },
     {
-      Header: "Email",
-      accessor: "email",
-      needsSorting: true,
+      Header: "Rate %",
+      accessor: "rate",
+      needsSorting: false,
       sortType: (rowA, rowB, columnId) => {
         const valueA = rowA.values[columnId].toLowerCase();
         const valueB = rowB.values[columnId].toLowerCase();
@@ -75,22 +56,14 @@ const ContactsList = () => {
       },
     },
     {
-      Header: "Status",
-      accessor: "isActive",
-      needsSorting: true,
-      Cell: ({ value }) => (
-        <>
-          {value ? (
-            <span className="text-green-700 bg-green-100 p-2 rounded-md dark:bg-green-800 dark:text-gray-100">
-              Active
-            </span>
-          ) : (
-            <span className="bg-red-100 text-red-700 p-2 rounded-md dark:bg-red-800 dark:text-gray-100">
-              Inactive
-            </span>
-          )}
-        </>
-      ),
+      Header: "Account for tax collected",
+      accessor: "taxCollectedAccount",
+      needsSorting: false,
+    },
+    {
+      Header: "Account for tax paid",
+      accessor: "taxPaidAccount",
+      needsSorting: false,
     },
     {
       Header: "Actions",
@@ -118,11 +91,12 @@ const ContactsList = () => {
       ),
     },
   ];
-
+  const { data, isError, isLoading, isFetching, isSuccess } =
+    useGetTaxCodesQuery();
   const [
-    deleteContact,
+    deleteTaxCode,
     // { isLoading: deleteloading, isSuccess, isError, error },
-  ] = useDeleteContactMutation();
+  ] = useDeleteTaxCodeMutation();
   const handleEdit = (rowData) => {
     const path = "edit/" + rowData._id;
     navigate(path);
@@ -135,13 +109,12 @@ const ContactsList = () => {
       setRowData(rowData);
     }
   };
-
-  const handleDeleteContact = async () => {
-    const res = await deleteContact({ id: rowData._id });
+  const handleDeleteTaxCode = async () => {
+    const res = await deleteTaxCode({ id: rowData._id });
 
     setShowDeletePopup(false);
     if (res.data) {
-      toast.success("Contact deleted succesfully!", {
+      toast.success("TaxCode deleted succesfully!", {
         theme: localStorage.theme,
         transition: Bounce,
       });
@@ -152,41 +125,19 @@ const ContactsList = () => {
       });
     }
   };
-  const handleRowSelect = (rowData) => {
-    // Logic to handle row selection
-  };
-
   useEffect(() => {
     if (!data?.entities) return;
 
-    let filteredData = Object.values(data.entities).filter(
-      (t) => t.isActive === !showInactive
-    );
-
-    if (selectedOption.value !== "All") {
-      filteredData = filteredData.filter(
-        (t) =>
-          t.contactType === selectedOption.value && t.isActive === !showInactive
-      );
-    }
+    let filteredData = Object.values(data.entities);
 
     setTableData(filteredData);
-  }, [data, selectedOption, showInactive]);
-
+  }, [data]);
   return (
     <div>
-      <Heading heading="All contacts" />
+      <Heading heading="Tax Codes" />
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex flex-col md:items-start md:justify-between md:p-6 xl:p-8">
         <div className="flex items-start sm:items-center justify-between">
           <div className="flex flex-col sm:flex-row gap-6">
-            <Select
-              selectedOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-              options={contactTypeOptions}
-              id="contactType"
-              label="Contact Type"
-            />
-
             <label
               htmlFor="table-search"
               className="block mb-2 font-semibold text-sm text-gray-700 dark:text-gray-400"
@@ -204,52 +155,36 @@ const ContactsList = () => {
                 />
               </div>
             </label>
-            <div className="flex items-center">
-              <label
-                htmlFor="contact-showInactive"
-                className="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300"
-              >
-                <input
-                  id="contact-showInactive"
-                  type="checkbox"
-                  value={showInactive}
-                  className="w-4 h-4 m-2 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 cursor-pointer"
-                  onChange={() => setShowInactive(!showInactive)}
-                />
-                Show inactive
-              </label>
-            </div>
           </div>
           <Link id="createLink" to="create">
             <span className="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-              Add new contact
+              Add tax code
             </span>
             <AddNewBlue />
           </Link>
         </div>
       </div>
       <div className="p-4 mt-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex flex-col md:items-start md:justify-between md:p-6 xl:p-8">
-        {tableData && selectedOption.value && (
+        {tableData && (
           <Table
             columns={columns}
             data={tableData}
             onEdit={handleEdit}
             onDelete={handleDelete}
-            onRowSelect={handleRowSelect}
             urltoNew="create"
             searchText={searchText}
             selectionRequired={false}
-            entriesName="contacts"
+            entriesName="tax codes"
           />
         )}
       </div>
       <DeleteConfirmationDialog
         open={showDeletePopup}
         onClose={() => setShowDeletePopup(!showDeletePopup)}
-        onConfirm={handleDeleteContact}
+        // onConfirm={handleDeleteContact}
       />
     </div>
   );
 };
 
-export default ContactsList;
+export default TaxCodeList;

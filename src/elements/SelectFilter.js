@@ -1,6 +1,6 @@
 import React from "react";
 
-const Select = ({ options, id, label, selectedOption, setSelectedOption }) => {
+const SelectFilter = ({ options, id, label, selectedOption, setSelectedOption }) => {
   return (
     <div className="col-span-6 sm:col-span-3">
       <label
@@ -31,4 +31,4 @@ const Select = ({ options, id, label, selectedOption, setSelectedOption }) => {
   );
 };
 
-export default Select;
+export default SelectFilter;

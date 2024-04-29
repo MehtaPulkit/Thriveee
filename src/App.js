@@ -27,6 +27,10 @@ import ContactsLayout from "./features/dashboard/contacts/ContactsLayout";
 import QuotesLayout from "./features/dashboard/quotes/QuotesLayout";
 import Quote from "./features/dashboard/quotes/Quote";
 import QuotesList from "./features/dashboard/quotes/QuotesList";
+import TaxCodeLayout from "./features/dashboard/accounting/taxCodes/TaxCodeLayout";
+import TaxCodeList from "./features/dashboard/accounting/taxCodes/TaxCodeList";
+import TaxCode from "./features/dashboard/accounting/taxCodes/TaxCode";
+import AccountingLayout from "./features/dashboard/accounting/AccountingLayout";
 
 function App() {
   return (
@@ -81,7 +85,14 @@ function App() {
                   <Route path="quotes" element={<QuotesLayout />}>
                     <Route index element={<QuotesList />} />
                     <Route path="create" element={<Quote />} />
-                    <Route path="edit/:cID" element={<Quote />} />
+                    <Route path="edit/:qID" element={<Quote />} />
+                  </Route>
+                  <Route path="accounting" element={<AccountingLayout />}>
+                    <Route path="tax-codes" element={<TaxCodeLayout />}>
+                      <Route index element={<TaxCodeList />} />
+                      <Route path="create" element={<TaxCode />} />
+                      <Route path="edit/:tcID" element={<TaxCode />} />
+                    </Route>
                   </Route>
                 </Route>
               </Route>

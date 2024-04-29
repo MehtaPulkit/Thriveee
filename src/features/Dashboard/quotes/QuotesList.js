@@ -6,30 +6,33 @@ import Table from "../../../hooks/Table";
 //   useGetQuotesQuery,
 // } from "./quoteApiSlice";
 import { useNavigate } from "react-router-dom";
-import Select from "../../../elements/Select";
+import Select from "../../../elements/SelectFilter";
 import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
 import { Bounce, toast } from "react-toastify";
 import AddNewBlue from "../../../hooks/IconHooks/AddNewWhite";
 import {
+  CalendarIcon,
   MagnifyingGlassIcon,
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
+import DatePickerFilter from "../../../elements/DatePickerFilter";
 
 const QuotesList = () => {
   const navigate = useNavigate();
-//   const { data, isError, isLoading, isFetching, isSuccess } =
-//     useGetQuotesQuery();
+  //   const { data, isError, isLoading, isFetching, isSuccess } =
+  //     useGetQuotesQuery();
   const [selectedOption, setSelectedOption] = useState({
     value: "All",
     name: "All",
   });
-  const quoteTypeOptions = [
+  const quoteStatusOptions = [
     { value: "All", name: "All" },
-    { value: "Customer", name: "Customer" },
-    { value: "Personal", name: "Personal" },
-    { value: "Supplier", name: "Supplier" },
+    { value: "Open", name: "Open" },
+    { value: "Accepted", name: "Accepted" },
+    { value: "Declined", name: "Declined" },
+    { value: "Invoiced", name: "Invoiced" },
   ];
 
   const [tableData, setTableData] = useState([]);
@@ -37,6 +40,9 @@ const QuotesList = () => {
   const [showInactive, setShowInactive] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [rowData, setRowData] = useState({});
+  let defaultDate = new Date();
+
+  console.log(defaultDate);
   const columns = [
     {
       Header: "Name",
@@ -119,10 +125,10 @@ const QuotesList = () => {
     },
   ];
 
-//   const [
-//     deleteQuote,
-//     // { isLoading: deleteloading, isSuccess, isError, error },
-//   ] = useDeleteQuoteMutation();
+  //   const [
+  //     deleteQuote,
+  //     // { isLoading: deleteloading, isSuccess, isError, error },
+  //   ] = useDeleteQuoteMutation();
   const handleEdit = (rowData) => {
     const path = "edit/" + rowData._id;
     navigate(path);
@@ -136,42 +142,42 @@ const QuotesList = () => {
     }
   };
 
-//   const handleDeleteQuote = async () => {
-//     const res = await deleteQuote({ id: rowData._id });
+  //   const handleDeleteQuote = async () => {
+  //     const res = await deleteQuote({ id: rowData._id });
 
-//     setShowDeletePopup(false);
-//     if (res.data) {
-//       toast.success("Quote deleted succesfully!", {
-//         theme: localStorage.theme,
-//         transition: Bounce,
-//       });
-//     } else if (res.error) {
-//       toast.error("There was some error!", {
-//         theme: localStorage.theme,
-//         transition: Bounce,
-//       });
-//     }
-//   };
+  //     setShowDeletePopup(false);
+  //     if (res.data) {
+  //       toast.success("Quote deleted succesfully!", {
+  //         theme: localStorage.theme,
+  //         transition: Bounce,
+  //       });
+  //     } else if (res.error) {
+  //       toast.error("There was some error!", {
+  //         theme: localStorage.theme,
+  //         transition: Bounce,
+  //       });
+  //     }
+  //   };
   const handleRowSelect = (rowData) => {
     // Logic to handle row selection
   };
 
-//   useEffect(() => {
-//     if (!data?.entities) return;
+  //   useEffect(() => {
+  //     if (!data?.entities) return;
 
-//     let filteredData = Object.values(data.entities).filter(
-//       (t) => t.isActive === !showInactive
-//     );
+  //     let filteredData = Object.values(data.entities).filter(
+  //       (t) => t.isActive === !showInactive
+  //     );
 
-//     if (selectedOption.value !== "All") {
-//       filteredData = filteredData.filter(
-//         (t) =>
-//           t.quoteType === selectedOption.value && t.isActive === !showInactive
-//       );
-//     }
+  //     if (selectedOption.value !== "All") {
+  //       filteredData = filteredData.filter(
+  //         (t) =>
+  //           t.quoteType === selectedOption.value && t.isActive === !showInactive
+  //       );
+  //     }
 
-//     setTableData(filteredData);
-//   }, [data, selectedOption, showInactive]);
+  //     setTableData(filteredData);
+  //   }, [data, selectedOption, showInactive]);
 
   return (
     <div>
@@ -179,14 +185,6 @@ const QuotesList = () => {
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex flex-col md:items-start md:justify-between md:p-6 xl:p-8">
         <div className="flex items-start sm:items-center justify-between">
           <div className="flex flex-col sm:flex-row gap-6">
-            <Select
-              selectedOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-              options={quoteTypeOptions}
-              id="quoteType"
-              label="Quote Type"
-            />
-
             <label
               htmlFor="table-search"
               className="block mb-2 font-semibold text-sm text-gray-700 dark:text-gray-400"
@@ -204,21 +202,6 @@ const QuotesList = () => {
                 />
               </div>
             </label>
-            <div className="flex items-center">
-              <label
-                htmlFor="checked-checkbox"
-                className="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300"
-              >
-                <input
-                  id="quote-showInactive"
-                  type="checkbox"
-                  value={showInactive}
-                  className="w-4 h-4 m-2 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 cursor-pointer"
-                  onChange={() => setShowInactive(!showInactive)}
-                />
-                Show inactive
-              </label>
-            </div>
           </div>
           <Link id="createLink" to="create">
             <span className="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
@@ -226,6 +209,26 @@ const QuotesList = () => {
             </span>
             <AddNewBlue />
           </Link>
+        </div>
+        <div date-rangepicker className="flex flex-col gap-4 md:flex-row">
+          <Select
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+            options={quoteStatusOptions}
+            id="quoteType"
+            label="Quote Type"
+          />
+          <DatePickerFilter
+            label="Issue from"
+            id="issueFrom"
+            defaultValue={defaultDate}
+          />
+
+          <DatePickerFilter
+            label="Issue to"
+            id="issueTo"
+            defaultValue={defaultDate}
+          />
         </div>
       </div>
       <div className="p-4 mt-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex flex-col md:items-start md:justify-between md:p-6 xl:p-8">
