@@ -1,18 +1,26 @@
-import React, { useEffect, useState } from "react";
-import Heading from "../../../../hooks/Heading";
-import AddNewBlue from "../../../../hooks/IconHooks/AddNewWhite";
-import { Link, useNavigate } from "react-router-dom";
-import Table from "../../../../hooks/Table";
-import DeleteConfirmationDialog from "../../../../hooks/DeleteConfirmationDialog";
-import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
-import {
-  useDeleteTaxCodeMutation,
-  useGetTaxCodesQuery,
-} from "./taxCodeApiSlice";
-import { Bounce, toast } from "react-toastify";
+import React from "react";
+import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
+import Table from "./Table";
+import AddNewBlue from "./IconHooks/AddNewWhite";
+import { Link } from "react-router-dom";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import Heading from "./Heading";
+/*
+Page List includes:
+Filters and table
 
-const TaxCodeList = () => {
+Filter: 
+    Search and Add new button
+Table:
+    With Selection
+    With Sorting
+    With action buttons
+    Columns example
+    Delete field
+    Edit field
+*/
+
+const PageList = () => {
   const navigate = useNavigate();
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [rowData, setRowData] = useState({});
@@ -20,8 +28,8 @@ const TaxCodeList = () => {
   const [searchText, setSearchText] = useState("");
   const columns = [
     {
-      Header: "Tax code",
-      accessor: "taxCode",
+      Header: "Header1",
+      accessor: "accessor1",
       needsSorting: false,
       sortType: (rowA, rowB, columnId) => {
         const valueA = rowA.values[columnId].toLowerCase();
@@ -31,41 +39,9 @@ const TaxCodeList = () => {
       // Custom sorting
     },
     {
-      Header: "Description",
-      accessor: "description",
-      maxWidth: "120px",
+      Header: "Header2",
+      accessor: "Accessor2",
       needsSorting: false,
-      sortType: (rowA, rowB, columnId) => {
-        const valueA = rowA.values[columnId].toLowerCase();
-        const valueB = rowB.values[columnId].toLowerCase();
-        return valueA.localeCompare(valueB);
-      },
-    },
-    {
-      Header: "Tax Type",
-      accessor: "taxType",
-      needsSorting: false,
-    },
-
-    {
-      Header: "Account for tax collected",
-      accessor: "taxCollectedAccount",
-      needsSorting: false,
-    },
-    {
-      Header: "Account for tax paid",
-      accessor: "taxPaidAccount",
-      needsSorting: false,
-    },
-    {
-      Header: "Rate %",
-      accessor: "rate",
-      needsSorting: false,
-      sortType: (rowA, rowB, columnId) => {
-        const valueA = rowA.values[columnId].toLowerCase();
-        const valueB = rowB.values[columnId].toLowerCase();
-        return valueA.localeCompare(valueB);
-      },
     },
     {
       Header: "Actions",
@@ -93,16 +69,21 @@ const TaxCodeList = () => {
       ),
     },
   ];
-  const { data, isError, isLoading, isFetching, isSuccess } =
-    useGetTaxCodesQuery();
-  const [
-    deleteTaxCode,
-    // { isLoading: deleteloading, isSuccess, isError, error },
-  ] = useDeleteTaxCodeMutation();
+
+  //   Add Get all query
+  const { data, isError, isLoading, isFetching, isSuccess } = useGetAllQuery();
+  //  Delete query
+  // const [
+  // deleteTaxCode,
+  // { isLoading: deleteloading, isSuccess, isError, error },
+  //   ] = useDeleteTaxCodeMutation();
+
+  // Handle Edit function
   const handleEdit = (rowData) => {
     const path = "edit/" + rowData._id;
     navigate(path);
   };
+  // Handle Delete function
   const handleDelete = (rowData) => {
     // Logic to handle delete action
 
@@ -111,23 +92,11 @@ const TaxCodeList = () => {
       setRowData(rowData);
     }
   };
-  const handleDeleteTaxCode = async () => {
-    const res = await deleteTaxCode({ id: rowData._id });
 
-    setShowDeletePopup(false);
-    if (res?.data?.isError || res.error) {
-      toast.error("There was some error!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
-    } else {
-      toast.success("A taxcode is deleted!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
-    }
-  };
+  //TODO: handleDelete code
+
   useEffect(() => {
+    // update if you more filters
     if (!data?.entities) return;
 
     let filteredData = Object.values(data.entities);
@@ -160,7 +129,7 @@ const TaxCodeList = () => {
           </div>
           <Link id="createLink" to="create">
             <span className="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-              Add tax code
+              Add new entry
             </span>
             <AddNewBlue />
           </Link>
@@ -176,7 +145,7 @@ const TaxCodeList = () => {
             urltoNew="create"
             searchText={searchText}
             selectionRequired={false}
-            entriesName="tax codes"
+            entriesName="Entries"
           />
         )}
       </div>
@@ -189,4 +158,4 @@ const TaxCodeList = () => {
   );
 };
 
-export default TaxCodeList;
+export default PageList;

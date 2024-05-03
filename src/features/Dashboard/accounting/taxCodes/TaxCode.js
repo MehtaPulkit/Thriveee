@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import {
   useAddNewTaxCodeMutation,
   useGetTaxCodeQuery,
+  useUpdateTaxCodeMutation,
 } from "./taxCodeApiSlice";
 import Heading from "../../../../hooks/Heading";
 import Subheading from "../../../../hooks/Subheading";
@@ -16,6 +17,9 @@ import Input from "../../../../elements/Input";
 import SimpleSelect from "../../../../elements/SimpleSelect";
 import { taxType } from "../../../../config/taxType";
 import ComplexSelect from "../../../../elements/ComplexSelect";
+import { Bounce, toast } from "react-toastify";
+import LoadingMsg from "../../../../hooks/LoadingMsg";
+import ErrorMsg from "../../../../hooks/ErrorMsg";
 
 const TaxCode = () => {
   const { id } = useAuth();
@@ -28,13 +32,9 @@ const TaxCode = () => {
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues:
-      !tcID &&
-      {
-        //   contactDesignation: "Individual",
-        //   contactType: "Customer",
-        //   contactIsActive: true,
-      },
+    defaultValues: !tcID && {
+      taxType: "Goods & Services Tax",
+    },
   });
 
   const {
@@ -46,45 +46,63 @@ const TaxCode = () => {
     skip: !tcID,
   });
   const watchTaxType = watch("taxType");
+  const [
+    updateTaxCode,
+    {
+      isLoading: updateIsLoading,
+      isSuccess: updateIsSuccess,
+      isError: updateIsError,
+      error,
+    },
+  ] = useUpdateTaxCodeMutation();
   const [addNewTaxCode, { isLoading, isError, isSuccess }] =
     useAddNewTaxCodeMutation();
 
-  const handleTaxCode = () => {};
-  //   useEffect(() => {
-  //     if (data) {
-  //       reset({
-  //         abn: data?.abn,
-  //         billingAdd1: data?.billingAddress?.addressLine1,
-  //         billingAdd2: data?.billingAddress?.addressLine2,
-  //         billingPostCode: data?.billingAddress?.postalCode,
-  //         billingState: data?.billingAddress?.state,
-  //         billingSuburb: data?.billingAddress?.suburb,
-  //         postalAdd1: data?.shippingAddress?.addressLine1,
-  //         postalAdd2: data?.shippingAddress?.addressLine2,
-  //         postalPostCode: data?.shippingAddress?.postalCode,
-  //         postalSuburb: data?.shippingAddress?.suburb,
-  //         postalState: data?.shippingAddress?.state,
-  //         phoneNo: data?.phoneNo,
-  //         contactDesignation: data?.designation,
-  //         contactId: data?.contactId,
-  //         contactIsActive: data?.isActive,
-  //         companyName: data?.companyName,
-  //         contactNotes: data?.notes,
-  //         contactType: data?.contactType,
-  //         email: data?.email,
-  //         firstName: data?.firstName,
-  //         lastName: data?.lastName,
-  //         mobileNo: data?.mobileNo,
-  //         websiteURL: data?.websiteURL,
-  //       });
-  //     }
-  //   }, [data]);
-  //   if (contactIsLoading && tcID) {
-  //     return <LoadingMsg />;
-  //   }
-  //   if (contactIsError && tcID) {
-  //     return <ErrorMsg />;
-  //   }
+  const handleTaxCode = async ({ taxCode, description, rate, taxType }) => {
+    const res = tcID
+      ? await updateTaxCode({
+          taxCodeId: tcID,
+          taxCode: taxCode,
+          rate: rate,
+          description: description,
+          taxType: taxType,
+        })
+      : await addNewTaxCode({
+          userId: id,
+          taxCode: taxCode,
+          rate: rate,
+          taxType: taxType,
+          description: description,
+        });
+    if (res?.data?.isError || res.error) {
+      toast.error("There was some error!", {
+        theme: localStorage.theme,
+        transition: Bounce,
+      });
+    } else {
+      toast.success(tcID ? "TaxCode is updated!" : "New taxCode created!", {
+        theme: localStorage.theme,
+        transition: Bounce,
+      });
+      navigate("/dashboard/accounting/tax-codes");
+    }
+  };
+  useEffect(() => {
+    if (data) {
+      reset({
+        taxCode: data.taxCode,
+        taxType: data.taxType,
+        rate: data.rate,
+        description: data.description,
+      });
+    }
+  }, [data]);
+  if (taxCodeIsLoading && tcID) {
+    return <LoadingMsg />;
+  }
+  if (taxCodeIsError && tcID) {
+    return <ErrorMsg />;
+  }
   return (
     <div>
       <Heading heading={tcID ? "Update Tax Code" : "Create new Tax Code"} />
@@ -142,16 +160,15 @@ const TaxCode = () => {
              errors={errors}
              name="AccruedDuty"
             /> */
-              /* <ComplexSelect
+                /* <ComplexSelect
              id="taxCode-ImportAgent"
              label="Linked contact for import agent"
              options={ImportAgent}
              register={register}
              errors={errors}
              name="ImportAgent"
-            /> */}
-              
-              }
+            /> */
+              }}
             {/* <ComplexSelect
              id="taxCode-taxPaid"
              label="Tax type"
@@ -184,7 +201,6 @@ const TaxCode = () => {
              errors={errors}
              name="WithholdingPyAccount"
             /> */}
-            
 
             {/* <ComplexSelect
              id="taxCode-LinkedAccTaxPaid"
@@ -198,7 +214,9 @@ const TaxCode = () => {
         </div>
 
         <div className="col-span-6 mt-6 sm:col-full">
-          <CancelBtn handleClick={() => navigate("/dashboard/accounting/tax-codes")} />
+          <CancelBtn
+            handleClick={() => navigate("/dashboard/accounting/tax-codes")}
+          />
           <SubmitBtn text={tcID ? "Update" : "Save"} />
         </div>
       </form>

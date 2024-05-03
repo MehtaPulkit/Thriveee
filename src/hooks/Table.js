@@ -122,19 +122,26 @@ const Table = ({
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);
+              console.log(row.cells);
               return (
                 <tr
                   {...row.getRowProps()}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
-                  {row.cells.map((cell) => (
-                    <td
-                      {...cell.getCellProps()}
-                      className="p-4 max-w-120 text-ellipsis overflow-hidden"
-                    >
-                      {cell.render("Cell")}
-                    </td>
-                  ))}
+                  {row.cells.map((cell) => {
+                    return cell.column.Header == "Actions" ? (
+                      <td {...cell.getCellProps()} className="p-2 min-w-120">
+                        {cell.render("Cell")}
+                      </td>
+                    ) : (
+                      <td
+                        {...cell.getCellProps()}
+                        className="p-2 max-w-120 text-ellipsis overflow-hidden whitespace-nowrap"
+                      >
+                        {cell.render("Cell")}
+                      </td>
+                    );
+                  })}
                 </tr>
               );
             })}
