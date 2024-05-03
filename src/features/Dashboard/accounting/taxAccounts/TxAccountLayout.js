@@ -24,8 +24,8 @@ const TxAccountLayout = () => {
       id: "bc3",
       type: "branch",
       index: 2,
-      bcName: "Accounts",
-      link: "/dashboard/accounting/tax-accounts",
+      bcName: "Chart of accounts",
+      link: "/dashboard/accounting/chart-of-accounts",
       isDisabled: false,
     },
   ];

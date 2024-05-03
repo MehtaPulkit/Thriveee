@@ -96,10 +96,10 @@ function App() {
                       <Route path="create" element={<TaxCode />} />
                       <Route path="edit/:tcID" element={<TaxCode />} />
                     </Route>
-                    <Route path="tax-accounts" element={<TxAccountLayout />}>
+                    <Route path="chart-of-accounts" element={<TxAccountLayout />}>
                       <Route index element={<TxAccountsList />} />
                       <Route path="create" element={<TxAccount />} />
-                      <Route path="edit/:tcID" element={<TxAccount />} />
+                      <Route path="edit/:coaID" element={<TxAccount />} />
                     </Route>
                   </Route>
                 </Route>

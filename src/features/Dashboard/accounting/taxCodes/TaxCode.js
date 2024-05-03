@@ -15,7 +15,7 @@ import CancelBtn from "../../../../elements/CancelBtn";
 import SubmitBtn from "../../../../elements/SubmitBtn";
 import Input from "../../../../elements/Input";
 import SimpleSelect from "../../../../elements/SimpleSelect";
-import { taxType } from "../../../../config/taxType";
+import { taxType } from "../../../../config/types";
 import ComplexSelect from "../../../../elements/ComplexSelect";
 import { Bounce, toast } from "react-toastify";
 import LoadingMsg from "../../../../hooks/LoadingMsg";

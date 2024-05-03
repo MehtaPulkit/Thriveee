@@ -7,8 +7,10 @@ const SimpleSelect = ({
   register,
   errors,
   name,
+  optWithGrp,
 }) => {
   const errorMessage = errors[name]?.message;
+
   return (
     <div className="col-span-6 sm:col-span-3">
       <label
@@ -26,11 +28,21 @@ const SimpleSelect = ({
             : "bg-gray-50 border-gray-300 focus:ring-blue-500 focus:border-blue-500   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         }   `}
       >
-        {options.map((opt) => (
-          <option key={opt} value={opt} className="p-2">
-            {opt}
-          </option>
-        ))}
+        {!optWithGrp
+          ? options.map((opt) => (
+              <option key={opt} value={opt} className="p-2">
+                {opt}
+              </option>
+            ))
+          : options.map((group) => (
+              <optgroup key={group.label} label={group.label}>
+                {group.options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
       </select>
       {errorMessage && (
         <p className="mt-2 text-sm text-red-600 dark:text-red-500">

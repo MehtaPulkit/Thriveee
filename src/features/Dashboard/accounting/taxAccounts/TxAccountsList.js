@@ -1,4 +1,8 @@
-import { MagnifyingGlassIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
+import {
+  MagnifyingGlassIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Heading from "../../../../hooks/Heading";
@@ -6,7 +10,12 @@ import { Link } from "react-router-dom";
 import AddNewBlue from "../../../../hooks/IconHooks/AddNewWhite";
 import Table from "../../../../hooks/Table";
 import DeleteConfirmationDialog from "../../../../hooks/DeleteConfirmationDialog";
-import { useGetTxAccountsQuery } from "./txAccountApiSlice";
+import {
+  useDeleteTxAccountMutation,
+  useGetTxAccountsQuery,
+} from "./txAccountApiSlice";
+import Tabs from "../../../../hooks/Tabs";
+import { txAccList } from "../../../../config/txAccountData";
 
 const TxAccountsList = () => {
   const navigate = useNavigate();
@@ -14,6 +23,10 @@ const TxAccountsList = () => {
   const [rowData, setRowData] = useState({});
   const [tableData, setTableData] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [tab, setTab] = useState();
+  const [showInactive, setShowInactive] = useState(false);
+  
   const columns = [
     {
       Header: "Header1",
@@ -59,12 +72,10 @@ const TxAccountsList = () => {
   ];
 
   //   Add Get all query
-  const { data, isError, isLoading, isFetching, isSuccess } = useGetTxAccountsQuery();
+  const { data, isError, isLoading, isFetching, isSuccess } =
+    useGetTxAccountsQuery();
   //  Delete query
-  // const [
-  // deleteTaxCode,
-  // { isLoading: deleteloading, isSuccess, isError, error },
-  //   ] = useDeleteTaxCodeMutation();
+  const [deleteTxAccount, {}] = useDeleteTxAccountMutation();
 
   // Handle Edit function
   const handleEdit = (rowData) => {
@@ -82,9 +93,7 @@ const TxAccountsList = () => {
   };
 
   //TODO: handleDelete code
-const handleDeleteAccount=()=>{
-
-}
+  const handleDeleteAccount = () => {};
   useEffect(() => {
     // update if you more filters
     if (!data?.entities) return;
@@ -93,9 +102,15 @@ const handleDeleteAccount=()=>{
 
     setTableData(filteredData);
   }, [data]);
+
   return (
     <div>
       <Heading heading="Chart of accounts" />
+      <Tabs
+        tablist={txAccList}
+        activeTabIndex={activeTabIndex}
+        setActiveTabIndex={setActiveTabIndex}
+      />
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex flex-col md:items-start md:justify-between md:p-6 xl:p-8">
         <div className="flex items-start sm:items-center justify-between">
           <div className="flex flex-col sm:flex-row gap-6">
@@ -116,6 +131,21 @@ const handleDeleteAccount=()=>{
                 />
               </div>
             </label>
+            <div className="flex items-center">
+              <label
+                htmlFor="contact-showInactive"
+                className="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300"
+              >
+                <input
+                  id="contact-showInactive"
+                  type="checkbox"
+                  value={showInactive}
+                  className="w-4 h-4 m-2 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 cursor-pointer"
+                  onChange={() => setShowInactive(!showInactive)}
+                />
+                Show inactive
+              </label>
+            </div>
           </div>
           <Link id="createLink" to="create">
             <span className="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
