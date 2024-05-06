@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   useAddNewTxAccountMutation,
+  useCheckDuplicateTxAccountMutation,
+  useGetTxAccountQuery,
   useGetTxAccountsQuery,
   useUpdateTxAccountMutation,
 } from "./txAccountApiSlice";
@@ -39,16 +41,22 @@ const TxAccount = () => {
   });
 
   const watchType = watch("accountType");
-  const watchTaxCode = watch("taxCode");
   const {
     data,
     isLoading: txAccountIsLoading,
     isError: txAccountIsError,
-  } = useGetTxAccountsQuery(coaID, {
+  } = useGetTxAccountQuery(coaID, {
     refetchOnMountOrArgChange: true,
     skip: !coaID,
   });
 
+  const {
+    data: allAccounts,
+    allAccountsIsError,
+    allAccountsIsLoading,
+    allAccountsIsFetching,
+    allAccountsIsSuccess,
+  } = useGetTxAccountsQuery();
   const [
     updateTxAccount,
     {
@@ -58,8 +66,18 @@ const TxAccount = () => {
       error,
     },
   ] = useUpdateTxAccountMutation();
+
   const [addNewTxAccount, { isLoading, isError, isSuccess }] =
     useAddNewTxAccountMutation();
+
+  const [
+    checkDuplicateTxAccount,
+    {
+      isLoading: checkDuplicateIsLoading,
+      isSuccess: checkDuplicateIsSuccess,
+      isError: checkDuplicateIsError,
+    },
+  ] = useCheckDuplicateTxAccountMutation();
 
   const {
     data: taxCodes,
@@ -69,6 +87,7 @@ const TxAccount = () => {
     isSuccess: taxCodesIsSuccess,
   } = useGetTaxCodesQuery();
   const [classification, setClassification] = useState();
+
   const handleTxAccount = async ({
     accountType,
     accountCode,
@@ -83,20 +102,40 @@ const TxAccount = () => {
     bankAccountName,
     companyTradingName,
   }) => {
-    // return
-    console.log(taxCode);
-    const [taxCodeId] = Object.values(taxCodes.entities).filter(
-      (code) => code.taxCode == taxCode
-    );
-    console.log(taxCodeId.id);
+    const [taxCodeId] =
+      taxCodes &&
+      Object.values(taxCodes.entities).filter(
+        (code) => code.taxCode == taxCode
+      );
+    // Check if COA exists
+    if (!coaID) {
+      const checkDuplicate = await checkDuplicateTxAccount({ accountCode });
+      if (checkDuplicate?.data?.isError || checkDuplicate?.error) {
+        toast.error(`${checkDuplicate?.error?.data?.message}`, {
+          theme: localStorage.theme,
+          transition: Bounce,
+        });
+        return;
+      }
+    } else if (coaID && accountCode != data.accountCode) {
+      toast.error(
+        `An account already exists, please check account code and try again.`,
+        {
+          theme: localStorage.theme,
+          transition: Bounce,
+        }
+      );
+      return;
+    }
 
     const res = coaID
       ? await updateTxAccount({
-          classification: classification,
+          accountId: coaID,
+          classification,
           accountType,
           accountCode,
           accountName,
-          taxCode: taxCodeId.id,
+          taxCode: taxCodeId?.id,
           notes,
           openingBalance,
           classifyCashflow,
@@ -110,11 +149,11 @@ const TxAccount = () => {
         })
       : await addNewTxAccount({
           userId: id,
-          classification: classification,
+          classification,
           accountType,
           accountCode,
           accountName,
-          taxCode: taxCodeId.id,
+          taxCode: taxCodeId?.id,
           notes,
           openingBalance,
           classifyCashflow,
@@ -126,7 +165,8 @@ const TxAccount = () => {
             companyTradingName,
           },
         });
-    if (res?.data?.isError || res.error) {
+
+    if (res?.data?.isError || res?.error) {
       toast.error("There was some error!", {
         theme: localStorage.theme,
         transition: Bounce,
@@ -142,11 +182,24 @@ const TxAccount = () => {
 
   useEffect(() => {
     if (data) {
+      const taxCodeName =
+        taxCodes &&
+        Object.values(taxCodes?.entities).find((tc) => tc._id == data.taxCode)
+          ?.taxCode;
       reset({
-        txAccount: data.txAccount,
-        taxType: data.taxType,
-        rate: data.rate,
-        description: data.description,
+        classification: data.classification,
+        accountType: data.accountType,
+        accountCode: data.accountCode,
+        accountName: data.accountName,
+        taxCode: taxCodeName,
+        notes: data.notes,
+        openingBalance: data.openingBalance,
+        classifyCashflow: data.classifyCashflow,
+        inactiveAccount: data.inactiveAccount,
+        bsb: data.bsb,
+        bankAccountNo: data.bankAccountNo,
+        bankAccountName: data.bankAccountName,
+        companyTradingName: data.companyTradingName,
       });
     }
   }, [data]);
@@ -163,12 +216,24 @@ const TxAccount = () => {
     }
   }, [watchType]);
 
-  // useEffect(() => {
-  //   if (taxCodes) {
-  //     console.log(Object.values(taxCodes.entities)[0].taxCode);
-  //     reset({ taxCode: Object.values(taxCodes.entities)[0].taxCode });
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (allAccounts && classification && !coaID) {
+      const maxAccountCode =
+        allAccounts &&
+        Object.values(allAccounts?.entities)
+          .filter(
+            (acc) =>
+              acc.classification === classification && !isNaN(acc.accountCode)
+          )
+          .reduce((max, acc) => Math.max(max, parseInt(acc.accountCode)), 0);
+
+      const nextCode = maxAccountCode + 1;
+
+      reset({
+        accountCode: nextCode,
+      });
+    }
+  }, [allAccounts, classification]);
 
   if (txAccountIsLoading && coaID) {
     return <LoadingMsg />;
@@ -177,9 +242,6 @@ const TxAccount = () => {
     return <ErrorMsg />;
   }
 
-  console.log(
-    accountType.map((group, i) => group.options.map((option, i) => i))
-  );
   return (
     <div>
       <Heading heading={coaID ? "Update Tax Code" : "Create new Tax Code"} />
@@ -241,15 +303,26 @@ const TxAccount = () => {
               register={register}
               required={false}
             />
-
-            <SimpleSelect
-              id="txAccount-classifyCashflow"
-              label="Classification for statements of cash flows"
-              options={cashFlowType}
-              register={register}
-              errors={errors}
-              name="classifyCashflow"
-            />
+            {![
+              "Bank",
+              "Income",
+              "Other income",
+              "Equity",
+              "Other expense",
+              "Expense",
+              "",
+              undefined,
+              null,
+            ].includes(watchType) && (
+              <SimpleSelect
+                id="txAccount-classifyCashflow"
+                label="Classification for statements of cash flows"
+                options={cashFlowType}
+                register={register}
+                errors={errors}
+                name="classifyCashflow"
+              />
+            )}
             <TextArea
               id="txAccount-notes"
               register={register}

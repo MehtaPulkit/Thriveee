@@ -20,6 +20,16 @@ export const accountType = [
     ],
   },
   {
+    label: "Liabilities",
+    options: [
+      { classification: "Liabilities", value: "Credit card" },
+      { classification: "Liabilities", value: "Accounts Payable" },
+      { classification: "Liabilities", value: "Other Current Liability" },
+      { classification: "Liabilities", value: "Long Term Liability" },
+      { classification: "Liabilities", value: "Other Liability" },
+    ],
+  },
+  {
     label: "Equity",
     options: [{ classification: "Equity", value: "Equity" }],
   },
@@ -27,14 +37,14 @@ export const accountType = [
     label: "Income",
     options: [
       { classification: "Income", value: "Income" },
-      { classification: "Income", value: "Other Income" },
+      { classification: "Income", value: "Other income" },
     ],
   },
   {
     label: "Expenses",
     options: [
       { classification: "Expense", value: "Expense" },
-      { classification: "Expense", value: "Other Expense" },
+      { classification: "Expense", value: "Other expense" },
     ],
   },
 ];

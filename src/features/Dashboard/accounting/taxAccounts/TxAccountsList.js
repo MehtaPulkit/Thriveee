@@ -16,7 +16,17 @@ import {
 } from "./txAccountApiSlice";
 import Tabs from "../../../../hooks/Tabs";
 import { txAccList } from "../../../../config/txAccountData";
+import { Bounce, toast } from "react-toastify";
 
+/*
+TODO:
+Sorting defaut asec
+Taxcode name
+Amount to account
+Filtering by type, search and inactive
+Grouping in table
+selection to delete
+*/
 const TxAccountsList = () => {
   const navigate = useNavigate();
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -26,7 +36,7 @@ const TxAccountsList = () => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [tab, setTab] = useState();
   const [showInactive, setShowInactive] = useState(false);
-  
+  const [selectedOption, setSelectedOption] = useState("All categories");
   const columns = [
     {
       Header: "Code",
@@ -96,9 +106,24 @@ const TxAccountsList = () => {
       setRowData(rowData);
     }
   };
-
+  console.log(activeTabIndex);
   //TODO: handleDelete code
-  const handleDeleteAccount = () => {};
+  const handleDeleteAccount = async () => {
+    const res = await deleteTxAccount({ id: rowData._id });
+
+    setShowDeletePopup(false);
+    if (res?.data?.isError || res.error) {
+      toast.error("There was some error!", {
+        theme: localStorage.theme,
+        transition: Bounce,
+      });
+    } else {
+      toast.success("A taxcode is deleted!", {
+        theme: localStorage.theme,
+        transition: Bounce,
+      });
+    }
+  };
   useEffect(() => {
     // update if you more filters
     if (!data?.entities) return;
@@ -108,6 +133,26 @@ const TxAccountsList = () => {
     setTableData(filteredData);
   }, [data]);
 
+  useEffect(() => {
+    if (!data?.entities) return;
+    const [selectedOptionValue] = txAccList.filter(
+      (type) => type.index == activeTabIndex
+    );
+    console.log(selectedOptionValue.filterValue);
+    let filteredData = Object.values(data.entities).filter(
+      (t) => t.inactiveAccount === showInactive
+    );
+
+    if (selectedOptionValue?.filterValue !== "All") {
+      filteredData = filteredData.filter(
+        (t) =>
+          t.classification === selectedOptionValue?.filterValue &&
+          t.inactiveAccount === showInactive
+      );
+    }
+
+    setTableData(filteredData);
+  }, [data, showInactive, activeTabIndex]);
   return (
     <div>
       <Heading heading="Chart of accounts" />

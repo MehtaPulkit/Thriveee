@@ -88,6 +88,7 @@ const TaxCode = () => {
     }
   };
   useEffect(() => {
+    console.log(data)
     if (data) {
       reset({
         taxCode: data.taxCode,

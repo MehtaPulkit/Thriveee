@@ -75,16 +75,27 @@ export const txAccountApiSlice = apiSlice.injectEndpoints({
         { type: "TxAccount", id: arg.id },
       ],
     }),
+    checkDuplicateTxAccount: builder.mutation({
+      query: (initialAccountData) => ({
+        url: "/accounts/check",
+        method: "POST",
+        body: {
+          ...initialAccountData,
+        },
+      }),
+      invalidatesTags: [{ type: "TxAccount", id: "LIST" }],
+    }),
   }),
 });
 
 export const {
   useGetTxAccountsQuery,
   useGetTxAccountQuery,
-//   useCheckDuplicateMutation,
+  //   useCheckDuplicateMutation,
   useAddNewTxAccountMutation,
   useUpdateTxAccountMutation,
   useDeleteTxAccountMutation,
+  useCheckDuplicateTxAccountMutation,
 } = txAccountApiSlice;
 
 // returns the query result object
