@@ -29,8 +29,8 @@ const TxAccountsList = () => {
   
   const columns = [
     {
-      Header: "Header1",
-      accessor: "accessor1",
+      Header: "Code",
+      accessor: "accountCode",
       needsSorting: false,
       sortType: (rowA, rowB, columnId) => {
         const valueA = rowA.values[columnId].toLowerCase();
@@ -40,8 +40,13 @@ const TxAccountsList = () => {
       // Custom sorting
     },
     {
-      Header: "Header2",
-      accessor: "Accessor2",
+      Header: "Name",
+      accessor: "accountName",
+      needsSorting: false,
+    },
+    {
+      Header: "Type",
+      accessor: "accountType",
       needsSorting: false,
     },
     {

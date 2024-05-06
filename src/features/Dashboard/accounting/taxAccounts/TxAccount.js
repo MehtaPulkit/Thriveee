@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useAddNewTxAccountMutation,
   useGetTxAccountsQuery,
@@ -20,6 +20,7 @@ import Input from "../../../../elements/Input";
 import ComplexSelect from "../../../../elements/ComplexSelect";
 import TextArea from "../../../../elements/TextArea";
 import FormCheckbox from "../../../../elements/FormCheckbox";
+import { useGetTaxCodesQuery } from "../taxCodes/taxCodeApiSlice";
 
 const TxAccount = () => {
   const { id } = useAuth();
@@ -34,11 +35,11 @@ const TxAccount = () => {
   } = useForm({
     defaultValues: !coaID && {
       openingBalance: 0,
-      isActive: true,
     },
   });
 
   const watchType = watch("accountType");
+  const watchTaxCode = watch("taxCode");
   const {
     data,
     isLoading: txAccountIsLoading,
@@ -60,21 +61,70 @@ const TxAccount = () => {
   const [addNewTxAccount, { isLoading, isError, isSuccess }] =
     useAddNewTxAccountMutation();
 
-  const handleTxAccount = async ({ txAccount, description, rate, taxType }) => {
+  const {
+    data: taxCodes,
+    isError: taxCodesIsError,
+    isLoading: taxCodesIsLoading,
+    isFetching: taxCodesIsFetching,
+    isSuccess: taxCodesIsSuccess,
+  } = useGetTaxCodesQuery();
+  const [classification, setClassification] = useState();
+  const handleTxAccount = async ({
+    accountType,
+    accountCode,
+    accountName,
+    taxCode,
+    notes,
+    openingBalance,
+    classifyCashflow,
+    inactiveAccount,
+    bsb,
+    bankAccountNo,
+    bankAccountName,
+    companyTradingName,
+  }) => {
+    // return
+    console.log(taxCode);
+    const [taxCodeId] = Object.values(taxCodes.entities).filter(
+      (code) => code.taxCode == taxCode
+    );
+    console.log(taxCodeId.id);
+
     const res = coaID
       ? await updateTxAccount({
-          txAccountId: coaID,
-          txAccount: txAccount,
-          rate: rate,
-          description: description,
-          taxType: taxType,
+          classification: classification,
+          accountType,
+          accountCode,
+          accountName,
+          taxCode: taxCodeId.id,
+          notes,
+          openingBalance,
+          classifyCashflow,
+          inactiveAccount,
+          bankDetails: {
+            bsb,
+            bankAccountNo,
+            bankAccountName,
+            companyTradingName,
+          },
         })
       : await addNewTxAccount({
           userId: id,
-          txAccount: txAccount,
-          rate: rate,
-          taxType: taxType,
-          description: description,
+          classification: classification,
+          accountType,
+          accountCode,
+          accountName,
+          taxCode: taxCodeId.id,
+          notes,
+          openingBalance,
+          classifyCashflow,
+          inactiveAccount,
+          bankDetails: {
+            bsb,
+            bankAccountNo,
+            bankAccountName,
+            companyTradingName,
+          },
         });
     if (res?.data?.isError || res.error) {
       toast.error("There was some error!", {
@@ -86,9 +136,10 @@ const TxAccount = () => {
         theme: localStorage.theme,
         transition: Bounce,
       });
-      navigate("/dashboard/accounting/tax-codes");
+      navigate("/dashboard/accounting/chart-of-accounts");
     }
   };
+
   useEffect(() => {
     if (data) {
       reset({
@@ -99,12 +150,36 @@ const TxAccount = () => {
       });
     }
   }, [data]);
+  useEffect(() => {
+    if (watchType && watchType != "Select") {
+      const classify = accountType
+        .flatMap((type) => type.options)
+        .find((opt) => opt.value === watchType).classification;
+
+      if (classify) {
+        setClassification(classify);
+      }
+      console.log(classify);
+    }
+  }, [watchType]);
+
+  // useEffect(() => {
+  //   if (taxCodes) {
+  //     console.log(Object.values(taxCodes.entities)[0].taxCode);
+  //     reset({ taxCode: Object.values(taxCodes.entities)[0].taxCode });
+  //   }
+  // }, []);
+
   if (txAccountIsLoading && coaID) {
     return <LoadingMsg />;
   }
   if (txAccountIsError && coaID) {
     return <ErrorMsg />;
   }
+
+  console.log(
+    accountType.map((group, i) => group.options.map((option, i) => i))
+  );
   return (
     <div>
       <Heading heading={coaID ? "Update Tax Code" : "Create new Tax Code"} />
@@ -113,35 +188,46 @@ const TxAccount = () => {
           <Subheading subheading="Details" />
           <div className="grid grid-cols-6 gap-6">
             <SimpleSelect
+              needSelect={true}
               id="txAccount-accountType"
               label="Type"
               options={accountType}
               register={register}
               errors={errors}
               name="accountType"
+              required={true}
               optWithGrp={true}
             />
-
             <Input
-              id="txAccount-code"
-              name="code"
+              id="txAccount-accountCode"
+              name="accountCode"
               label="Code"
               placeholder=""
-              key="txAccount-code"
+              key="txAccount-accountCode"
               type="text"
               errors={errors}
               register={register}
               required={true}
             />
             <Input
-              id="txAccount-name"
-              name="name"
+              id="txAccount-accountName"
+              name="accountName"
               label="Name"
               placeholder=""
-              key="txAccount-name"
+              key="txAccount-accountName"
               type="text"
               errors={errors}
               register={register}
+              required={true}
+            />
+            <ComplexSelect
+              id="txAccount-taxCode"
+              label="Tax Code"
+              options={taxCodes ? Object.values(taxCodes?.entities) : []}
+              register={register}
+              errors={errors}
+              name="taxCode"
+              objvalue="taxCode"
               required={true}
             />
             <Input
@@ -155,20 +241,7 @@ const TxAccount = () => {
               register={register}
               required={false}
             />
-            {/* <ComplexSelect  id="txAccount-taxCode"
-              label="Type"
-              options={taxCode}
-              register={register}
-              errors={errors}
-              name="taxCode"
-              optWithGrp={true} /> */}
-            <TextArea
-              id="txAccount-notes"
-              register={register}
-              errors={errors}
-              label="Notes"
-              name="notes"
-            />
+
             <SimpleSelect
               id="txAccount-classifyCashflow"
               label="Classification for statements of cash flows"
@@ -177,17 +250,24 @@ const TxAccount = () => {
               errors={errors}
               name="classifyCashflow"
             />
-            <FormCheckbox
-              id="txAccount-isActive"
+            <TextArea
+              id="txAccount-notes"
               register={register}
               errors={errors}
-              label="Is Active"
-              name="isActive"
+              label="Notes"
+              name="notes"
+            />
+            <FormCheckbox
+              id="txAccount-inactiveAccount"
+              register={register}
+              errors={errors}
+              label="Inactive Account"
+              name="inactiveAccount"
             />
             {(watchType == "Bank" || watchType == "Credit Card") && (
               <>
                 <div className="col-span-6 w-full">
-                  <hr class="w-full h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
+                  <hr className="w-full h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
                 </div>
                 <Input
                   id="txAccount-bsb"
@@ -201,22 +281,22 @@ const TxAccount = () => {
                   required={false}
                 />
                 <Input
-                  id="txAccount-bankAccNo"
-                  name="bankAccNo"
+                  id="txAccount-bankAccountNo"
+                  name="bankAccountNo"
                   label="Bank Account Number"
                   placeholder=""
-                  key="txAccount-bankAccNo"
+                  key="txAccount-bankAccountNo"
                   type="text"
                   errors={errors}
                   register={register}
                   required={false}
                 />
                 <Input
-                  id="txAccount-bankAccName"
-                  name="bankAccName"
+                  id="txAccount-bankAccountName"
+                  name="bankAccountName"
                   label="Bank Account Name"
                   placeholder=""
-                  key="txAccount-bankAccName"
+                  key="txAccount-bankAccountName"
                   type="text"
                   errors={errors}
                   register={register}

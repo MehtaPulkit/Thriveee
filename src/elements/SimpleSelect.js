@@ -8,6 +8,8 @@ const SimpleSelect = ({
   errors,
   name,
   optWithGrp,
+  needSelect,
+  required,
 }) => {
   const errorMessage = errors[name]?.message;
 
@@ -17,10 +19,12 @@ const SimpleSelect = ({
         htmlFor={id}
         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
       >
-        {label}
+        {label} {required && <span className="text-red-600">*</span>}
       </label>
       <select
-        {...register(name)}
+        {...register(name, {
+          required: { value: required, message: `${label} is required` },
+        })}
         id={id}
         className={`shadow-sm border text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 ${
           errors[name]
@@ -28,6 +32,11 @@ const SimpleSelect = ({
             : "bg-gray-50 border-gray-300 focus:ring-blue-500 focus:border-blue-500   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         }   `}
       >
+        {needSelect && (
+          <option disabled selected value="">
+            Select
+          </option>
+        )}
         {!optWithGrp
           ? options.map((opt) => (
               <option key={opt} value={opt} className="p-2">
@@ -37,8 +46,8 @@ const SimpleSelect = ({
           : options.map((group) => (
               <optgroup key={group.label} label={group.label}>
                 {group.options.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
+                  <option key={option.value} value={option.value}>
+                    {option.value}
                   </option>
                 ))}
               </optgroup>
