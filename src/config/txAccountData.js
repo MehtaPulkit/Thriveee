@@ -1,7 +1,7 @@
 export const txAccList = [
   {
     id: "AccountTab0",
-    tabName: "All categories",
+    tabName: "All accounts",
     index: 0,
     filterValue: "All",
   },
@@ -9,7 +9,7 @@ export const txAccList = [
     id: "AccountTab1",
     tabName: "Assets",
     index: 1,
-    filterValue: "Asset",
+    filterValue: "Assets",
   },
   {
     id: "AccountTab2",
@@ -34,18 +34,6 @@ export const txAccList = [
     id: "AccountTab6",
     tabName: "Expenses",
     index: 6,
-    filterValue: "Expense",
-  },
-  {
-    id: "AccountTab7",
-    tabName: "Other income",
-    index: 7,
-    filterValue: "Income",
-  },
-  {
-    id: "AccountTab8",
-    tabName: "Other expenses",
-    index: 8,
     filterValue: "Expense",
   },
 ];

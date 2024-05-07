@@ -212,7 +212,6 @@ const TxAccount = () => {
       if (classify) {
         setClassification(classify);
       }
-      console.log(classify);
     }
   }, [watchType]);
 
@@ -244,7 +243,7 @@ const TxAccount = () => {
 
   return (
     <div>
-      <Heading heading={coaID ? "Update Tax Code" : "Create new Tax Code"} />
+      <Heading heading={coaID ? "Update an account" : "Create new account"} />
       <form className="w-full" onSubmit={handleSubmit(handleTxAccount)}>
         <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex md:flex-col md:items-start md:justify-center md:p-6 xl:p-8">
           <Subheading subheading="Details" />

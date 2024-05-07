@@ -17,6 +17,7 @@ import {
 import Tabs from "../../../../hooks/Tabs";
 import { txAccList } from "../../../../config/txAccountData";
 import { Bounce, toast } from "react-toastify";
+import { useGetTaxCodesQuery } from "../taxCodes/taxCodeApiSlice";
 
 /*
 TODO:
@@ -37,27 +38,42 @@ const TxAccountsList = () => {
   const [tab, setTab] = useState();
   const [showInactive, setShowInactive] = useState(false);
   const [selectedOption, setSelectedOption] = useState("All categories");
+
+  const {
+    data: taxCodes,
+    isError: taxCodesIsError,
+    isLoading: taxCodesIsLoading,
+    isFetching: taxCodesIsFetching,
+    isSuccess: taxCodesIsSuccess,
+  } = useGetTaxCodesQuery();
+
   const columns = [
     {
       Header: "Code",
       accessor: "accountCode",
-      needsSorting: false,
+      needsSorting: true,
       sortType: (rowA, rowB, columnId) => {
         const valueA = rowA.values[columnId].toLowerCase();
         const valueB = rowB.values[columnId].toLowerCase();
         return valueA.localeCompare(valueB);
       },
+
       // Custom sorting
     },
     {
       Header: "Name",
       accessor: "accountName",
-      needsSorting: false,
     },
     {
       Header: "Type",
       accessor: "accountType",
-      needsSorting: false,
+    },
+    {
+      Header: "Tax Code",
+      accessor: (row) =>
+        Object.values(taxCodes?.entities).filter(
+          (tc) => tc._id == row.taxCode
+        )[0]?.taxCode || "",
     },
     {
       Header: "Actions",
@@ -106,7 +122,6 @@ const TxAccountsList = () => {
       setRowData(rowData);
     }
   };
-  console.log(activeTabIndex);
   //TODO: handleDelete code
   const handleDeleteAccount = async () => {
     const res = await deleteTxAccount({ id: rowData._id });
@@ -138,10 +153,10 @@ const TxAccountsList = () => {
     const [selectedOptionValue] = txAccList.filter(
       (type) => type.index == activeTabIndex
     );
-    console.log(selectedOptionValue.filterValue);
     let filteredData = Object.values(data.entities).filter(
       (t) => t.inactiveAccount === showInactive
     );
+    console.log(selectedOptionValue);
 
     if (selectedOptionValue?.filterValue !== "All") {
       filteredData = filteredData.filter(
@@ -150,7 +165,7 @@ const TxAccountsList = () => {
           t.inactiveAccount === showInactive
       );
     }
-
+    console.log(filteredData.filter((f) => f.classification == "Assets"));
     setTableData(filteredData);
   }, [data, showInactive, activeTabIndex]);
   return (

@@ -42,6 +42,12 @@ const Table = ({
     {
       columns,
       data,
+      initialState: {
+        sortBy: columns.map((column) => ({
+          id: column.accessor,
+          desc: column.defaultSortDesc || false,
+        })),
+      },
     },
     useGlobalFilter,
     // Enable global filtering
@@ -83,6 +89,7 @@ const Table = ({
       setGlobalFilter(searchText);
     }
   }, [searchText]);
+  console.log(rows);
   return (
     <>
       <div className="relative overflow-x-auto shadow-sm sm:rounded-lg">
@@ -96,7 +103,7 @@ const Table = ({
                 {headerGroup.headers.map((column) => (
                   <th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    className="p-4"
+                    className="py-4 px-2"
                   >
                     <div className="flex items-center gap-2">
                       {column.render("Header")}
@@ -109,7 +116,7 @@ const Table = ({
                               <SortAesc />
                             )
                           ) : (
-                            <></>
+                            <>{console.log(column)}</>
                           )}
                         </span>
                       )}
@@ -122,7 +129,6 @@ const Table = ({
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);
-              console.log(row.cells);
               return (
                 <tr
                   {...row.getRowProps()}

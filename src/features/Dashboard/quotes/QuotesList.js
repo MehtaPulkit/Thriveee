@@ -42,7 +42,6 @@ const QuotesList = () => {
   const [rowData, setRowData] = useState({});
   let defaultDate = new Date();
 
-  console.log(defaultDate);
   const columns = [
     {
       Header: "Name",
