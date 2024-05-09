@@ -57,6 +57,7 @@
 .max-w-120 {
     max-width: 120px;
 }
+
 .min-w-120 {
     min-width: 120px;
 }
@@ -92,7 +93,17 @@
     background: #555;
 }
 
+.col-span-2 {
+    grid-column: span 2 / span 2;
+}
+
 // scrollbar end
+
+
+//datepicker
+.react-datepicker-wrapper {
+    width: 100%;
+}
 
 //Mobile screen
 @media screen and (max-width:640px) {
@@ -100,6 +111,20 @@
         margin-top: 50px;
     }
 
+}
+
+@media (min-width:640px) {
+    .sm\:col-span-2 {
+        grid-column: span 2 / span 2;
+    }
+
+    .sm\:col-start-4 {
+        grid-column-start: 4;
+    }
+
+    .sm\:col-span-3 {
+        grid-column: span 3 / span 3;
+    }
 }
 
 //Tablet screen and more
