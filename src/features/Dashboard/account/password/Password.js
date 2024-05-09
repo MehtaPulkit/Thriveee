@@ -7,8 +7,8 @@ import {
 } from "../../../../config/minMax";
 import useAuth from "../../../../hooks/useAuth";
 import { useUpdatePasswordMutation } from "../user/userApiSlice";
-import { Bounce, toast } from "react-toastify";
 import SubmitBtn from "../../../../elements/SubmitBtn";
+import { toastAlerts } from "../../../../hooks/utils";
 
 const Password = () => {
   const { id } = useAuth();
@@ -26,9 +26,9 @@ const Password = () => {
     confirmpassword,
   }) => {
     if (newpassword != confirmpassword) {
-      return toast.warn("New and confirm password must match", {
-        theme: localStorage.theme,
-        transition: Bounce,
+      toastAlerts({
+        type: "warn",
+        message: "New and confirm password must match",
       });
     }
 
@@ -37,15 +37,12 @@ const Password = () => {
       currentPassword: currentpassword,
       password: newpassword,
     });
-    if (res.data) {
-      toast.success("Your password is updated!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
-    } else if (res.error) {
-      toast.error(`${res.error.data.message}`, {
-        theme: localStorage.theme,
-        transition: Bounce,
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: `${res.error.data.message}` });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: "Your password is updated!",
       });
     }
   };
@@ -98,7 +95,7 @@ const Password = () => {
           />
 
           <div className="col-span-6 sm:col-full">
-          <SubmitBtn text="Save" />
+            <SubmitBtn text="Save" />
           </div>
         </div>
       </form>

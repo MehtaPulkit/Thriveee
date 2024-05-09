@@ -22,7 +22,16 @@ const Table = ({
   searchText,
   selectionRequired,
   entriesName,
+  initialSortBy
 }) => {
+  const initialState = {
+    sortBy: columns
+      .filter(col => col.initialSort) // Filter columns with initialSort property
+      .map(column => ({
+        id:initialSortBy? column[initialSortBy]:column.accessor,
+        desc: column.defaultSortDesc || false,
+      })),
+  };
   const {
     getTableProps,
     getTableBodyProps,
@@ -42,12 +51,7 @@ const Table = ({
     {
       columns,
       data,
-      initialState: {
-        sortBy: columns.map((column) => ({
-          id: column.accessor,
-          desc: column.defaultSortDesc || false,
-        })),
-      },
+      initialState:initialState
     },
     useGlobalFilter,
     // Enable global filtering
@@ -89,7 +93,6 @@ const Table = ({
       setGlobalFilter(searchText);
     }
   }, [searchText]);
-  console.log(rows);
   return (
     <>
       <div className="relative overflow-x-auto shadow-sm sm:rounded-lg">
@@ -107,19 +110,18 @@ const Table = ({
                   >
                     <div className="flex items-center gap-2">
                       {column.render("Header")}
-                      {column.needsSorting && (
-                        <span>
-                          {column.isSorted ? (
-                            column.isSortedDesc ? (
-                              <SortDesc />
-                            ) : (
-                              <SortAesc />
-                            )
+                      <span>
+                        {console.log(column)}
+                        {column.isSorted ? (
+                          column.isSortedDesc ? (
+                            <SortDesc />
                           ) : (
-                            <>{console.log(column)}</>
-                          )}
-                        </span>
-                      )}
+                            <SortAesc />
+                          )
+                        ) : (
+                          <></>
+                        )}
+                      </span>
                     </div>
                   </th>
                 ))}

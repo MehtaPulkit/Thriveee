@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   useAddNewTxAccountMutation,
   useCheckDuplicateTxAccountMutation,
+  useDeleteTxAccountMutation,
   useGetTxAccountQuery,
   useGetTxAccountsQuery,
   useUpdateTxAccountMutation,
@@ -9,7 +10,6 @@ import {
 import useAuth from "../../../../hooks/useAuth";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Bounce, toast } from "react-toastify";
 import LoadingMsg from "../../../../hooks/LoadingMsg";
 import ErrorMsg from "../../../../hooks/ErrorMsg";
 import Heading from "../../../../hooks/Heading";
@@ -23,11 +23,15 @@ import ComplexSelect from "../../../../elements/ComplexSelect";
 import TextArea from "../../../../elements/TextArea";
 import FormCheckbox from "../../../../elements/FormCheckbox";
 import { useGetTaxCodesQuery } from "../taxCodes/taxCodeApiSlice";
+import { toastAlerts } from "../../../../hooks/utils";
+import DeleteConfirmationDialog from "../../../../hooks/DeleteConfirmationDialog";
+import DeleteBtn from "../../../../elements/DeleteBtn";
 
 const TxAccount = () => {
   const { id } = useAuth();
   const { coaID } = useParams();
   const navigate = useNavigate();
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
   const {
     register,
     handleSubmit,
@@ -69,7 +73,10 @@ const TxAccount = () => {
 
   const [addNewTxAccount, { isLoading, isError, isSuccess }] =
     useAddNewTxAccountMutation();
-
+    const [
+      deleteTxAccount,
+      // { isLoading: deleteloading, isSuccess, isError, error },
+    ] = useDeleteTxAccountMutation();
   const [
     checkDuplicateTxAccount,
     {
@@ -111,20 +118,19 @@ const TxAccount = () => {
     if (!coaID) {
       const checkDuplicate = await checkDuplicateTxAccount({ accountCode });
       if (checkDuplicate?.data?.isError || checkDuplicate?.error) {
-        toast.error(`${checkDuplicate?.error?.data?.message}`, {
-          theme: localStorage.theme,
-          transition: Bounce,
+        toastAlerts({
+          type: "error",
+          message: `${checkDuplicate?.error?.data?.message}`,
         });
         return;
       }
     } else if (coaID && accountCode != data.accountCode) {
-      toast.error(
-        `An account already exists, please check account code and try again.`,
-        {
-          theme: localStorage.theme,
-          transition: Bounce,
-        }
-      );
+      toastAlerts({
+        type: "error",
+        message:
+          "An account already exists, please check account code and try again!",
+      });
+
       return;
     }
 
@@ -167,19 +173,31 @@ const TxAccount = () => {
         });
 
     if (res?.data?.isError || res?.error) {
-      toast.error("There was some error!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
+      toastAlerts({ type: "error", message: "There was some error!" });
     } else {
-      toast.success(coaID ? "Account is updated!" : "New account created!", {
-        theme: localStorage.theme,
-        transition: Bounce,
+      toastAlerts({
+        type: "success",
+        message: coaID ? "Account is updated!" : "New account created!",
       });
       navigate("/dashboard/accounting/chart-of-accounts");
     }
   };
 
+  const handleDelete = async () => {
+    const res = await deleteTxAccount({ id: coaID });
+
+    setShowDeletePopup(false);
+
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: "There was some error!" });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: "Account deleted successfully!",
+      });
+      navigate("/dashboard/accounting/chart-of-accounts");
+    }
+  };
   useEffect(() => {
     if (data) {
       const taxCodeName =
@@ -390,15 +408,23 @@ const TxAccount = () => {
           </div>
         </div>
 
-        <div className="col-span-6 mt-6 sm:col-full">
-          <CancelBtn
-            handleClick={() =>
-              navigate("/dashboard/accounting/chart-of-accounts")
-            }
-          />
-          <SubmitBtn text={coaID ? "Update" : "Save"} />
+        <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
+          <div>
+            <CancelBtn
+              handleClick={() =>
+                navigate("/dashboard/accounting/chart-of-accounts")
+              }
+            />
+            <SubmitBtn text={coaID ? "Update" : "Save"} />
+          </div>
+          {coaID && <DeleteBtn handleClick={() => setShowDeletePopup(true)} />}
         </div>
       </form>
+      <DeleteConfirmationDialog
+        open={showDeletePopup}
+        onClose={() => setShowDeletePopup(!showDeletePopup)}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 };

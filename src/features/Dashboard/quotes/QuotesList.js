@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import SelectFilter from "../../../elements/SelectFilter";
 import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
-import { Bounce, toast } from "react-toastify";
 import AddNewBlue from "../../../hooks/IconHooks/AddNewWhite";
 import {
   CalendarIcon,
@@ -142,20 +141,7 @@ const QuotesList = () => {
   };
 
   //   const handleDeleteQuote = async () => {
-  //     const res = await deleteQuote({ id: rowData._id });
-
-  //     setShowDeletePopup(false);
-  //     if (res.data) {
-  //       toast.success("Quote deleted succesfully!", {
-  //         theme: localStorage.theme,
-  //         transition: Bounce,
-  //       });
-  //     } else if (res.error) {
-  //       toast.error("There was some error!", {
-  //         theme: localStorage.theme,
-  //         transition: Bounce,
-  //       });
-  //     }
+  //     
   //   };
   const handleRowSelect = (rowData) => {
     // Logic to handle row selection

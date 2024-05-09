@@ -75,16 +75,26 @@ export const taxCodeApiSlice = apiSlice.injectEndpoints({
         { type: "TaxCode", id: arg.id },
       ],
     }),
+    checkDuplicateTaxCode: builder.mutation({
+      query: (initialAccountData) => ({
+        url: "/taxCodes/check",
+        method: "POST",
+        body: {
+          ...initialAccountData,
+        },
+      }),
+      invalidatesTags: [{ type: "TaxCode", id: "LIST" }],
+    }),
   }),
 });
 
 export const {
   useGetTaxCodesQuery,
   useGetTaxCodeQuery,
-//   useCheckDuplicateMutation,
   useAddNewTaxCodeMutation,
   useUpdateTaxCodeMutation,
   useDeleteTaxCodeMutation,
+  useCheckDuplicateTaxCodeMutation,
 } = taxCodeApiSlice;
 
 // returns the query result object

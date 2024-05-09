@@ -9,13 +9,13 @@ import { useNavigate } from "react-router-dom";
 import SelectFilter from "../../../elements/SelectFilter";
 import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
-import { Bounce, toast } from "react-toastify";
 import AddNewBlue from "../../../hooks/IconHooks/AddNewWhite";
 import {
   MagnifyingGlassIcon,
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
+import { toastAlerts } from "../../../hooks/utils";
 
 const ContactsList = () => {
   const navigate = useNavigate();
@@ -40,8 +40,8 @@ const ContactsList = () => {
   const columns = [
     {
       Header: "Name",
-      accessor: (row) => row.companyName || row.firstName + row.lastName,
-      needsSorting: true,
+      accessor: (row) => row.companyName || row.firstName + " " + row.lastName,
+      initialSort: true,// Initial sort on default
       sortType: (rowA, rowB, columnId) => {
         const valueA = rowA.values[columnId].toLowerCase();
         const valueB = rowB.values[columnId].toLowerCase();
@@ -52,7 +52,7 @@ const ContactsList = () => {
     {
       Header: "Contact ID",
       accessor: "contactId",
-      needsSorting: true,
+
       sortType: (rowA, rowB, columnId) => {
         const valueA = rowA.values[columnId].toLowerCase();
         const valueB = rowB.values[columnId].toLowerCase();
@@ -62,12 +62,10 @@ const ContactsList = () => {
     {
       Header: "Contact no",
       accessor: (row) => row.phoneNo || row.mobileNo,
-      needsSorting: true,
     },
     {
       Header: "Email",
       accessor: "email",
-      needsSorting: true,
       sortType: (rowA, rowB, columnId) => {
         const valueA = rowA.values[columnId].toLowerCase();
         const valueB = rowB.values[columnId].toLowerCase();
@@ -77,7 +75,6 @@ const ContactsList = () => {
     {
       Header: "Status",
       accessor: "isActive",
-      needsSorting: true,
       Cell: ({ value }) => (
         <>
           {value ? (
@@ -118,7 +115,6 @@ const ContactsList = () => {
       ),
     },
   ];
-
   const [
     deleteContact,
     // { isLoading: deleteloading, isSuccess, isError, error },
@@ -140,15 +136,12 @@ const ContactsList = () => {
     const res = await deleteContact({ id: rowData._id });
 
     setShowDeletePopup(false);
-    if (res.data) {
-      toast.success("Contact deleted succesfully!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
-    } else if (res.error) {
-      toast.error("There was some error!", {
-        theme: localStorage.theme,
-        transition: Bounce,
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: "There was some error!" });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: "Contact deleted successfully!",
       });
     }
   };
@@ -240,6 +233,7 @@ const ContactsList = () => {
             searchText={searchText}
             selectionRequired={false}
             entriesName="contacts"
+            initialSortBy="Header"
           />
         )}
       </div>

@@ -10,7 +10,7 @@ import {
   useDeleteTaxCodeMutation,
   useGetTaxCodesQuery,
 } from "./taxCodeApiSlice";
-import { Bounce, toast } from "react-toastify";
+import { toastAlerts } from "../../../../hooks/utils";
 
 const TaxCodeList = () => {
   const navigate = useNavigate();
@@ -115,15 +115,12 @@ const TaxCodeList = () => {
     const res = await deleteTaxCode({ id: rowData._id });
 
     setShowDeletePopup(false);
-    if (res?.data?.isError || res.error) {
-      toast.error("There was some error!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: "There was some error!" });
     } else {
-      toast.success("A taxcode is deleted!", {
-        theme: localStorage.theme,
-        transition: Bounce,
+      toastAlerts({
+        type: "success",
+        message: "Tax Code deleted successfully!",
       });
     }
   };

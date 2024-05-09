@@ -2,26 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "../../elements/Input";
 import { useForm } from "react-hook-form";
-import { Bounce, toast } from "react-toastify";
 import {
   emailPattern,
   mobilePattern,
   namePattern,
 } from "../../config/regexPatterns";
-import {
-  MaxNameLength,
-  MinNameLength,
-} from "../../config/minMax";
+import { MaxNameLength, MinNameLength } from "../../config/minMax";
 import Stepper from "../../hooks/Stepper";
 import SignupConfirmation from "./SignupConfirmation";
 import Checkbox from "../../elements/Checkbox";
-import {
-  useCheckDuplicateMutation,
-} from "../dashboard/account/user/userApiSlice";
+import { useCheckDuplicateMutation } from "../dashboard/account/user/userApiSlice";
 import SignupSecurity from "./SignupSecurity";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
+import { toastAlerts } from "../../hooks/utils";
 const Signup = () => {
-  
   const [step, setStep] = useState({
     shortName: "Personal",
     addOnToName: "Info",
@@ -59,9 +53,9 @@ const Signup = () => {
     // Check if user exist
     const res = await checkDuplicate({ email: data.email });
     if (res.error) {
-      return toast.error(`${res.error?.data?.message}`, {
-        theme: "light",
-        transition: Bounce,
+      return toastAlerts({
+        type: "error",
+        message: `${res.error.data.message}`,
       });
     } else {
       setSignUpData(data);
@@ -74,29 +68,29 @@ const Signup = () => {
     }
     //
   };
-  const location= useLocation();
+  const location = useLocation();
 
   useEffect(() => {
     // Add event listener for beforeunload event
     const handleBeforeUnload = (event) => {
-        // Check if form fields are filled
-        if (location.pathname.includes("signup")) {
-            // Cancel the event
-            event.preventDefault();
-            // Chrome requires returnValue to be set
-            event.returnValue = '';
-            // Show alert to the user
-            return 'Are you sure you want to leave? Your changes may not be saved.';
-        }
+      // Check if form fields are filled
+      if (location.pathname.includes("signup")) {
+        // Cancel the event
+        event.preventDefault();
+        // Chrome requires returnValue to be set
+        event.returnValue = "";
+        // Show alert to the user
+        return "Are you sure you want to leave? Your changes may not be saved.";
+      }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     // Clean up by removing the event listener when the component unmounts
     return () => {
-        window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-}, []);
+  }, []);
   return (
     <section>
       <div className="flex flex-col h-screen w-screen md:flex-row">
@@ -124,7 +118,9 @@ const Signup = () => {
           </Link>
 
           <div className="hidden md:block p-6 rounded-lg semi-white">
-            <h3 className="mb-4 font-semibold text-lg">We got it all covered:</h3>
+            <h3 className="mb-4 font-semibold text-lg">
+              We got it all covered:
+            </h3>
             <ol>
               {features.map((item, i) => (
                 <li className="" key={i}>

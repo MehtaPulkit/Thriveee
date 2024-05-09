@@ -15,7 +15,7 @@ const DeleteConfirmationDialog = ({ open, onClose, onConfirm, msg }) => {
         <div className="relative flex flex-col items-center m-auto bg-white rounded-lg p-8 top-100 dark:bg-gray-800 dark:text-gray-200">
           <ExclamationCircleIcon className="w-14 text-gray-500 dark:text-gray-100 mb-4" />
           <div className="mb-8">
-            {msg || "Are you sure you want to delete this item?"}
+            {msg || "Are you sure you want to delete?"}
           </div>
           <div className="flex justify-center">
             <CancelBtn handleClick={onClose} text="No" />

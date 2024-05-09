@@ -16,15 +16,12 @@ import {
 } from "./txAccountApiSlice";
 import Tabs from "../../../../hooks/Tabs";
 import { txAccList } from "../../../../config/txAccountData";
-import { Bounce, toast } from "react-toastify";
 import { useGetTaxCodesQuery } from "../taxCodes/taxCodeApiSlice";
+import { toastAlerts } from "../../../../hooks/utils";
 
 /*
 TODO:
-Sorting defaut asec
-Taxcode name
 Amount to account
-Filtering by type, search and inactive
 Grouping in table
 selection to delete
 */
@@ -51,7 +48,7 @@ const TxAccountsList = () => {
     {
       Header: "Code",
       accessor: "accountCode",
-      needsSorting: true,
+      initialSort: true,
       sortType: (rowA, rowB, columnId) => {
         const valueA = rowA.values[columnId].toLowerCase();
         const valueB = rowB.values[columnId].toLowerCase();
@@ -127,15 +124,12 @@ const TxAccountsList = () => {
     const res = await deleteTxAccount({ id: rowData._id });
 
     setShowDeletePopup(false);
-    if (res?.data?.isError || res.error) {
-      toast.error("There was some error!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: "There was some error!" });
     } else {
-      toast.success("A taxcode is deleted!", {
-        theme: localStorage.theme,
-        transition: Bounce,
+      toastAlerts({
+        type: "success",
+        message: "Account deleted successfully!",
       });
     }
   };

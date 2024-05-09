@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../../../hooks/useAuth";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
   useAddNewTaxCodeMutation,
+  useCheckDuplicateTaxCodeMutation,
+  useDeleteTaxCodeMutation,
   useGetTaxCodeQuery,
   useUpdateTaxCodeMutation,
 } from "./taxCodeApiSlice";
@@ -17,14 +19,18 @@ import Input from "../../../../elements/Input";
 import SimpleSelect from "../../../../elements/SimpleSelect";
 import { taxType } from "../../../../config/types";
 import ComplexSelect from "../../../../elements/ComplexSelect";
-import { Bounce, toast } from "react-toastify";
 import LoadingMsg from "../../../../hooks/LoadingMsg";
 import ErrorMsg from "../../../../hooks/ErrorMsg";
+import { toastAlerts } from "../../../../hooks/utils";
+import DeleteConfirmationDialog from "../../../../hooks/DeleteConfirmationDialog";
+import DeleteBtn from "../../../../elements/DeleteBtn";
 
 const TaxCode = () => {
   const { id } = useAuth();
   const { tcID } = useParams();
   const navigate = useNavigate();
+
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
   const {
     register,
     handleSubmit,
@@ -46,6 +52,16 @@ const TaxCode = () => {
     skip: !tcID,
   });
   const watchTaxType = watch("taxType");
+
+  const [
+    checkDuplicateTaxCode,
+    {
+      isLoading: checkDuplicateIsLoading,
+      isSuccess: checkDuplicateIsSuccess,
+      isError: checkDuplicateIsError,
+    },
+  ] = useCheckDuplicateTaxCodeMutation();
+
   const [
     updateTaxCode,
     {
@@ -55,10 +71,34 @@ const TaxCode = () => {
       error,
     },
   ] = useUpdateTaxCodeMutation();
+
   const [addNewTaxCode, { isLoading, isError, isSuccess }] =
     useAddNewTaxCodeMutation();
+  const [
+    deleteTaxCode,
+    // { isLoading: deleteloading, isSuccess, isError, error },
+  ] = useDeleteTaxCodeMutation();
 
   const handleTaxCode = async ({ taxCode, description, rate, taxType }) => {
+    if (!tcID) {
+      const checkDuplicate = await checkDuplicateTaxCode({ taxCode });
+      if (checkDuplicate?.data?.isError || checkDuplicate?.error) {
+        toastAlerts({
+          type: "error",
+          message: `${checkDuplicate?.error?.data?.message}`,
+        });
+        return;
+      }
+    } else if (tcID && taxCode != data.taxCode) {
+      toastAlerts({
+        type: "error",
+        message:
+          "An account already exists, please check account code and try again!",
+      });
+
+      return;
+    }
+
     const res = tcID
       ? await updateTaxCode({
           taxCodeId: tcID,
@@ -75,14 +115,26 @@ const TaxCode = () => {
           description: description,
         });
     if (res?.data?.isError || res.error) {
-      toast.error("There was some error!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
+      toastAlerts({ type: "error", message: "There was some error!" });
     } else {
-      toast.success(tcID ? "TaxCode is updated!" : "New taxCode created!", {
-        theme: localStorage.theme,
-        transition: Bounce,
+      toastAlerts({
+        type: "success",
+        message: tcID ? "TaxCode is updated!" : "New taxCode created!",
+      });
+      navigate("/dashboard/accounting/tax-codes");
+    }
+  };
+
+  const handleDelete = async () => {
+    const res = await deleteTaxCode({ id: tcID });
+    setShowDeletePopup(false);
+
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: "There was some error!" });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: "Tax Code deleted successfully!",
       });
       navigate("/dashboard/accounting/tax-codes");
     }
@@ -213,13 +265,21 @@ const TaxCode = () => {
           </div>
         </div>
 
-        <div className="col-span-6 mt-6 sm:col-full">
-          <CancelBtn
-            handleClick={() => navigate("/dashboard/accounting/tax-codes")}
-          />
-          <SubmitBtn text={tcID ? "Update" : "Save"} />
+        <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
+          <div>
+            <CancelBtn
+              handleClick={() => navigate("/dashboard/accounting/tax-codes")}
+            />
+            <SubmitBtn text={tcID ? "Update" : "Save"} />
+          </div>
+          {tcID && <DeleteBtn handleClick={() => setShowDeletePopup(true)} />}
         </div>
       </form>
+      <DeleteConfirmationDialog
+        open={showDeletePopup}
+        onClose={() => setShowDeletePopup(!showDeletePopup)}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 };

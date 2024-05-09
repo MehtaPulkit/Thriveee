@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Heading from "../../../hooks/Heading";
 import Subheading from "../../../hooks/Subheading";
 import Input from "../../../elements/Input";
@@ -22,10 +22,10 @@ import ContactAddress from "./ContactAddress";
 import TextArea from "../../../elements/TextArea";
 import {
   useAddNewContactMutation,
+  useDeleteContactMutation,
   useGetContactQuery,
   useUpdateContactMutation,
 } from "./contactApiSlice";
-import { Bounce, toast } from "react-toastify";
 import useAuth from "../../../hooks/useAuth";
 import { useParams } from "react-router-dom";
 import { useNavigate, u } from "react-router-dom";
@@ -33,6 +33,9 @@ import SubmitBtn from "../../../elements/SubmitBtn";
 import CancelBtn from "../../../elements/CancelBtn";
 import ErrorMsg from "../../../hooks/ErrorMsg";
 import LoadingMsg from "../../../hooks/LoadingMsg";
+import DeleteBtn from "../../../elements/DeleteBtn";
+import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
+import { toastAlerts } from "../../../hooks/utils";
 
 const Contact = () => {
   const { id } = useAuth();
@@ -66,6 +69,7 @@ const Contact = () => {
   const sameAddress = watch("contactAddIsSame");
   const watchDesignation = watch("contactDesignation");
 
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [
     updateContact,
     {
@@ -78,6 +82,11 @@ const Contact = () => {
 
   const [addNewContact, { isLoading, isError, isSuccess }] =
     useAddNewContactMutation();
+
+  const [
+    deleteContact,
+    // { isLoading: deleteloading, isSuccess, isError, error },
+  ] = useDeleteContactMutation();
 
   const handleContactForm = async ({
     abn,
@@ -168,17 +177,14 @@ const Contact = () => {
             postalCode: contactAddIsSame ? billingPostCode : postalPostCode,
           },
         });
-    if (res.data) {
-      toast.success(cID ? "Contact is updated!" : "New contact created!", {
-        theme: localStorage.theme,
-        transition: Bounce,
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: "There was some error!" });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: cID ? "Contact is updated!" : "New contact created!",
       });
       navigate("/dashboard/contacts");
-    } else if (res.error) {
-      toast.error("There was some error!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
     }
   };
 
@@ -211,6 +217,22 @@ const Contact = () => {
       });
     }
   }, [data]);
+
+  const handleDeleteContact = async () => {
+    const res = await deleteContact({ id: cID });
+
+    setShowDeletePopup(false);
+
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: "There was some error!" });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: "Contact deleted successfully!",
+      });
+      navigate("/dashboard/contacts");
+    }
+  };
   if (contactIsLoading && cID) {
     return <LoadingMsg />;
   }
@@ -403,11 +425,19 @@ const Contact = () => {
             id="contact-notes"
           />
         </div>
-        <div className="col-span-6 mt-6 sm:col-full">
-          <CancelBtn handleClick={() => navigate("/dashboard/contacts")} />
-          <SubmitBtn text={cID ? "Update" : "Save"} />
+        <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
+          <div>
+            <CancelBtn handleClick={() => navigate("/dashboard/contacts")} />
+            <SubmitBtn text={cID ? "Update" : "Save"} />
+          </div>
+          {cID && <DeleteBtn handleClick={() => setShowDeletePopup(true)} />}
         </div>
       </form>
+      <DeleteConfirmationDialog
+        open={showDeletePopup}
+        onClose={() => setShowDeletePopup(!showDeletePopup)}
+        onConfirm={handleDeleteContact}
+      />
     </div>
   );
 };

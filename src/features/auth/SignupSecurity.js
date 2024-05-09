@@ -3,7 +3,7 @@ import { MaxPasswordLength, MinPasswordLength } from "../../config/minMax";
 import Input from "../../elements/Input";
 import { useAddNewUserMutation } from "../dashboard/account/user/userApiSlice";
 
-import { Bounce, toast } from "react-toastify";
+import { toastAlerts } from "../../hooks/utils";
 
 const SignupSecurity = ({ signupData, setStep }) => {
   const {
@@ -17,16 +17,9 @@ const SignupSecurity = ({ signupData, setStep }) => {
     useAddNewUserMutation();
   const handleSignupSecSubmit = async ({ newpassword, confirmpassword }) => {
     if (newpassword !== confirmpassword) {
-      return toast.warn("Password and confirm password must match", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
+      return toastAlerts({
+        type: "warn",
+        message: "Password and confirm password must match",
       });
     }
     const res = await addNewUser({
@@ -41,16 +34,9 @@ const SignupSecurity = ({ signupData, setStep }) => {
         stepNo: "3",
       });
     } else if (res.error) {
-      toast.error(`${res.error.data.message}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
+      toastAlerts({
+        type: "error",
+        message: `${res.error.data.message}`,
       });
     }
   };

@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
-import {
-  useUpdateUserNotificationsMutation,
-} from "../user/userApiSlice.js";
+import React from "react";
+import { useUpdateUserNotificationsMutation } from "../user/userApiSlice.js";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../../hooks/useAuth.js";
-import { Bounce, toast } from "react-toastify";
 import Toggle from "../../../../elements/Toggle.js";
 import RadioGrp from "../../../../elements/RadioGrp.js";
 import SubmitBtn from "../../../../elements/SubmitBtn.js";
-import { useRefreshMutation } from "../../../auth/authApiSlice.js";
+import { toastAlerts } from "../../../../hooks/utils.js";
+
 const notificationData = [
   {
     id: "Type",
@@ -21,6 +19,7 @@ const notificationData = [
     info: "Get all the buzz about the products and offers.",
   },
 ];
+
 const Notification = () => {
   const { id, notificationPreference } = useAuth();
   const options = ["Email", "Mobile", "Both"];
@@ -47,15 +46,12 @@ const Notification = () => {
       typeNotification,
       newsletterNotification,
     });
-    if (res.data) {
-      toast.success("Your notification preferences are updated!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
-    } else if (res.error) {
-      toast.error(`${res.error.data.message}`, {
-        theme: localStorage.theme,
-        transition: Bounce,
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: `${res.error.data.message}` });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: "Your notification preferences are updated!",
       });
     }
   };

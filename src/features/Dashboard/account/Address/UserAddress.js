@@ -3,11 +3,11 @@ import { useForm } from "react-hook-form";
 import Input from "../../../../elements/Input";
 import useAuth from "../../../../hooks/useAuth";
 import { useUpdateUserAddressMutation } from "../user/userApiSlice";
-import { Bounce, toast } from "react-toastify";
 import SubmitBtn from "../../../../elements/SubmitBtn";
+import { toastAlerts } from "../../../../hooks/utils";
 
 const UserAddress = ({ type, address }) => {
-  const { id} = useAuth();
+  const { id } = useAuth();
 
   const {
     register,
@@ -66,15 +66,13 @@ const UserAddress = ({ type, address }) => {
       postalCode:
         type == "Postal" ? data?.PostalPostCode : data?.CurrentPostCode,
     });
-    if (res.data) {
-      toast.success("Your address details are updated!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
-    } else if (res.error) {
-      toast.error(`${res.error.data.message}`, {
-        theme: localStorage.theme,
-        transition: Bounce,
+
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: `${res.error.data.message}` });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: "Your address details are updated!",
       });
     }
   };

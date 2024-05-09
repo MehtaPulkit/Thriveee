@@ -1,16 +1,6 @@
-import React, { useState } from "react";
-import useAuth from "../../../hooks/useAuth";
-import { useNavigate, useParams } from "react-router-dom";
-import Heading from "../../../hooks/Heading";
-import Subheading from "../../../hooks/Subheading";
-import { useForm } from "react-hook-form";
-import CancelBtn from "../../../elements/CancelBtn";
-import SubmitBtn from "../../../elements/SubmitBtn";
-import Input from "../../../elements/Input";
-import DeleteBtn from "../../../elements/DeleteBtn";
-import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
+import React from "react";
 
-const Quote = () => {
+const Page = () => {
   //User Id
   const { id } = useAuth();
 
@@ -19,7 +9,7 @@ const Quote = () => {
 
   //navigate to url
   const navigate = useNavigate();
-  
+
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   // Use form
   const {
@@ -53,21 +43,43 @@ const Quote = () => {
   // const [addNewContact, { isLoading, isError, isSuccess }] =
   //   useAddNewContactMutation();
 
-  //  handle form edit and add
-  const handleForm = async () => {};
-  // Reset for Edit form
-
-//Delete 
-//Delete mutation
+  //Delete mutation
   // const [
   //   deleteContact,
     // { isLoading: deleteloading, isSuccess, isError, error },
   // ] = useDeleteContactMutation();
 
-const handleDelete = async () => {
-  
-};
 
+  //  handle form edit and add
+  const handleForm = async () => {
+    // const re=await ;
+    // if (res?.data?.isError || res?.error) {
+    //   toastAlerts({ type: "error", message: "There was some error!" });
+    // } else {
+    //   toastAlerts({
+    //     type: "success",
+    //     message: cID ? "Contact is updated!" : "New contact created!",
+    //   });
+    //   navigate("/dashboard/pages");
+    // }
+  };
+  // Reset for Edit form
+
+  //handle Delete
+  const handleDelete = async () => {
+    const res = await deleteContact({ id: cID });
+
+    setShowDeletePopup(false);
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: "There was some error!" });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: "Contact deleted successfully!",
+      });
+      navigate("/dashboard/pages");
+    }
+  };
   // useEffect(() => {
   //   if (data) {
   //     reset({
@@ -93,10 +105,10 @@ const handleDelete = async () => {
           <Subheading subheading="Details" />
           <div className="grid grid-cols-6 gap-6">
             <Input
-              id="contact-text"
+              id="page-text"
               name="text"
               label="Text"
-              key="contact-text"
+              key="page-text"
               type="text"
               errors={errors}
               // pattern={emailPattern}
@@ -106,20 +118,18 @@ const handleDelete = async () => {
           </div>
         </div>
         <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
-          <div>
-            <CancelBtn handleClick={() => navigate("/dashboard/quotes")} />
-            <SubmitBtn text={qID ? "Update" : "Save"} />
-          </div>{" "}
-          {qID && <DeleteBtn handleClick={() => setShowDeletePopup(true)} />}
+          <CancelBtn handleClick={() => navigate("/dashboard/contacts")} />
+          <SubmitBtn text={qID ? "Update" : "Save"} />
         </div>
+       
       </form>
       <DeleteConfirmationDialog
         open={showDeletePopup}
         onClose={() => setShowDeletePopup(!showDeletePopup)}
-        onConfirm={handleDelete}
+        onConfirm={handleDeleteContact}
       />
     </div>
   );
 };
 
-export default Quote;
+export default Page;

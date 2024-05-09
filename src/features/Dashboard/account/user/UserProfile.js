@@ -9,10 +9,10 @@ import {
 import Input from "../../../../elements/Input";
 import { MaxNameLength, MinNameLength } from "../../../../config/minMax";
 import { useUpdateUserMutation } from "./userApiSlice";
-import { Bounce, toast } from "react-toastify";
 import UserAddress from "../address/UserAddress";
 import ProfilePic from "./ProfilePic";
 import SubmitBtn from "../../../../elements/SubmitBtn";
+import { toastAlerts } from "../../../../hooks/utils";
 
 const UserProfile = () => {
   const {
@@ -64,15 +64,13 @@ const UserProfile = () => {
       dateOfBirth: birthday,
       mobileNumber: mobileNo,
     });
-    if (res.data) {
-      toast.success("Your details are updated!", {
-        theme: localStorage.theme,
-        transition: Bounce,
-      });
-    } else if (res.error) {
-      toast.error("There was some error!", {
-        theme: localStorage.theme,
-        transition: Bounce,
+
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: "There was some error!" });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: "Your details are updated!",
       });
     }
   };
