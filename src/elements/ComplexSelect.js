@@ -47,7 +47,7 @@ const ComplexSelect = ({
           Select
         </option>
         {optWithGrp
-          ? options.map((grp) => (
+          ? options?.map((grp) => (
               <optgroup label={grp}>
                 {grp.map((opt) => (
                   <option key={opt} value={opt} className="p-2">
@@ -56,7 +56,7 @@ const ComplexSelect = ({
                 ))}
               </optgroup>
             ))
-          : options.map((opt, i) => (
+          : options?.map((opt, i) => (
               <option key={opt[objvalue]} value={opt[objvalue]} className="p-2">
                 {opt[objvalue]}
               </option>

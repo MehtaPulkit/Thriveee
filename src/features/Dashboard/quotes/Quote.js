@@ -131,9 +131,6 @@ const Quote = () => {
                 register={register}
                 required={true}
               />
-
-              {/* Issue Date */}
-              {/* Expiry Date */}
               <DatePicker
                 name="issueDate"
                 id="quote-issueDate"
@@ -172,6 +169,7 @@ const Quote = () => {
               />
             </div>
           </div>
+          <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
         </div>
         <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
           <div>

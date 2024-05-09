@@ -118,8 +118,13 @@ const Page = () => {
           </div>
         </div>
         <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
-          <CancelBtn handleClick={() => navigate("/dashboard/contacts")} />
-          <SubmitBtn text={qID ? "Update" : "Save"} />
+          <div>
+            <CancelBtn
+              handleClick={() => navigate("/dashboard/accounting/tax-codes")}
+            />
+            <SubmitBtn text={tcID ? "Update" : "Save"} />
+          </div>
+          {tcID && <DeleteBtn handleClick={() => setShowDeletePopup(true)} />}
         </div>
        
       </form>

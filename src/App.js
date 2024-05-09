@@ -34,6 +34,9 @@ import AccountingLayout from "./features/dashboard/accounting/AccountingLayout";
 import TxAccountLayout from "./features/dashboard/accounting/taxAccounts/TxAccountLayout";
 import TxAccount from "./features/dashboard/accounting/taxAccounts/TxAccount";
 import TxAccountsList from "./features/dashboard/accounting/taxAccounts/TxAccountsList";
+import JobLayout from "./features/dashboard/accounting/jobs/JobLayout";
+import JobsList from "./features/dashboard/accounting/jobs/JobsList";
+import Job from "./features/dashboard/accounting/jobs/Job";
 
 function App() {
   return (
@@ -96,10 +99,19 @@ function App() {
                       <Route path="create" element={<TaxCode />} />
                       <Route path="edit/:tcID" element={<TaxCode />} />
                     </Route>
-                    <Route path="chart-of-accounts" element={<TxAccountLayout />}>
+
+                    <Route
+                      path="chart-of-accounts"
+                      element={<TxAccountLayout />}
+                    >
                       <Route index element={<TxAccountsList />} />
                       <Route path="create" element={<TxAccount />} />
                       <Route path="edit/:coaID" element={<TxAccount />} />
+                    </Route>
+                    <Route path="jobs" element={<JobLayout />}>
+                      <Route index element={<JobsList />} />
+                      <Route path="create" element={<Job />} />
+                      <Route path="edit/:tcID" element={<Job />} />
                     </Route>
                   </Route>
                 </Route>

@@ -77,8 +77,8 @@ const DashboardMenu = ({ isOverlay, menuOpen, setMenuOpen }) => {
         },
         {
           id: "menu32",
-          name: "Create general journal",
-          link: "accounting/create-general-journals",
+          name: "Jobs",
+          link: "accounting/jobs",
           icon: "",
         },
         {
