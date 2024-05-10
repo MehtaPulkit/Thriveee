@@ -80,7 +80,11 @@ const DatePicker = ({ id, name, label, register, errors, required }) => {
               required: { value: required, message: `${label} is required` },
             })}
             type="text"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+            className={`shadow-sm border text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 ${
+              errors[name]
+                ? "bg-red-50 border-red-400 focus:ring-red-500 focus:border-red-500 dark:border-red-600 dark:placeholder-red-400   dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
+                : "bg-gray-50 border-gray-300 focus-visible:border-blue-500 focus:border-blue-500   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            }   `}
             placeholder="Select Date"
             value={new Intl.DateTimeFormat("en-AU", {
               timeZone: "Australia/Sydney",

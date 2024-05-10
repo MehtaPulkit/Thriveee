@@ -8,12 +8,21 @@ import Subheading from "../../../../hooks/Subheading";
 import CancelBtn from "../../../../elements/CancelBtn";
 import SubmitBtn from "../../../../elements/SubmitBtn";
 import DeleteConfirmationDialog from "../../../../hooks/DeleteConfirmationDialog";
-import { useDeleteJobMutation, useGetJobQuery } from "./jobsApiSlice";
-import Input from "../../../../elements/Input";
+import {
+  useAddNewJobMutation,
+  useDeleteJobMutation,
+  useGetJobQuery,
+  useUpdateJobMutation,
+} from "./jobsApiSlice";
 import TextArea from "../../../../elements/TextArea";
 import FormCheckbox from "../../../../elements/FormCheckbox";
 import DeleteBtn from "../../../../elements/DeleteBtn";
+import Input from "../../../../elements/Input";
 import ComplexSelect from "../../../../elements/ComplexSelect";
+import ErrorMsg from "../../../../hooks/ErrorMsg";
+import LoadingMsg from "../../../../hooks/LoadingMsg";
+import SelectWithAdd from "../../../../elements/SelectWithAdd";
+import PopUpModal from "../../../../hooks/PopupModal";
 
 const Job = () => {
   //User Id
@@ -55,25 +64,33 @@ const Job = () => {
 
   // Add mutation
 
-  // const [addNewJob, { isLoading, isError, isSuccess }] =
-  //   useAddNewJobMutation();
+  const [addNewJob] = useAddNewJobMutation();
 
+  const [updateJob] = useUpdateJobMutation();
   //Delete mutation
-  const [deleteJob, { isLoading: deleteloading, isSuccess, isError, error }] =
-    useDeleteJobMutation();
+  const [deleteJob] = useDeleteJobMutation();
 
   //  handle form edit and add
-  const handleForm = async () => {
-    // const re=await ;
-    // if (res?.data?.isError || res?.error) {
-    //   toastAlerts({ type: "error", message: "There was some error!" });
-    // } else {
-    //   toastAlerts({
-    //     type: "success",
-    //     message: jobID ? "Job is updated!" : "New job created!",
-    //   });
-    //   navigate("/dashboard/jobs");
-    // }
+  const handleForm = async ({
+    jobNo,
+    jobName,
+    description,
+    inActive,
+    contactId,
+  }) => {
+    console.log(jobNo);
+    console.log(contactId);
+    return;
+    const res = jobID ? await updateJob() : await addNewJob();
+    if (res?.data?.isError || res?.error) {
+      toastAlerts({ type: "error", message: "There was some error!" });
+    } else {
+      toastAlerts({
+        type: "success",
+        message: jobID ? "Job is updated!" : "New job created!",
+      });
+      navigate("/dashboard/jobs");
+    }
   };
   // Reset for Edit form
 
@@ -103,12 +120,12 @@ const Job = () => {
 
   //Edit data loading or error msgs
 
-  // if (jobIsLoading && cID) {
-  //   return <LoadingMsg />;
-  // }
-  // if (jobIsError && cID) {
-  //   return <ErrorMsg />;
-  // }
+  if (jobIsLoading && jobID) {
+    return <LoadingMsg />;
+  }
+  if (jobIsError && jobID) {
+    return <ErrorMsg />;
+  }
   return (
     <div>
       <Heading heading={jobID ? "Update quote" : "Create quote"} />
@@ -134,7 +151,6 @@ const Job = () => {
               type="jobName"
               errors={errors}
               register={register}
-              required={true}
             />
             <TextArea
               id="job-description"
@@ -144,17 +160,17 @@ const Job = () => {
               type="description"
               errors={errors}
               register={register}
-              required={true}
             />
-            <ComplexSelect
+            <SelectWithAdd
               id="job-contactId"
               name="contactId"
-              label="Linked Customer"
+              label="Linked customer"
               key="job-contactId"
               type="contactId"
               errors={errors}
               register={register}
-              required={true}
+              addTitle="Create Customer"
+              reset={reset}
             />
             <FormCheckbox
               id="job-inActive"
@@ -182,6 +198,7 @@ const Job = () => {
         onClose={() => setShowDeletePopup(!showDeletePopup)}
         onConfirm={handleDelete}
       />
+      <PopUpModal></PopUpModal>
     </div>
   );
 };

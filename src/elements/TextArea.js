@@ -9,7 +9,7 @@ const TextArea = ({
   register,
   errors,
 }) => {
-    const errorMessage = errors[name]?.message;
+  const errorMessage = errors[name]?.message;
   return (
     <div className="col-span-6 sm:col-span-3">
       <label
@@ -17,6 +17,7 @@ const TextArea = ({
         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
       >
         {label}
+        {required && <span className="text-red-600">*</span>}
       </label>
       <textarea
         {...register(name, {
@@ -24,7 +25,11 @@ const TextArea = ({
         })}
         id={id}
         rows="4"
-        className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        className={`shadow-sm border text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 ${
+          errors[name]
+            ? "bg-red-50 border-red-400 focus:ring-red-500 focus:border-red-500 dark:border-red-600 dark:placeholder-red-400   dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
+            : "bg-gray-50 border-gray-300 focus-visible:border-blue-500 focus:border-blue-500   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        }   `}
         placeholder=""
       ></textarea>
       {errorMessage && (

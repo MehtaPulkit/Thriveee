@@ -105,6 +105,11 @@
     width: 100%;
 }
 
+.focus\:ring-blue-500:focus {
+    --tw-ring-opacity: 1;
+    outline: solid rgb(59 130 246 / 1) 1px !important;
+}
+
 //Mobile screen
 @media screen and (max-width:640px) {
     .my-100 {
