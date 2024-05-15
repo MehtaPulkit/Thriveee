@@ -37,7 +37,7 @@ import DeleteBtn from "../../../elements/DeleteBtn";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
 import { toastAlerts } from "../../../hooks/utils";
 
-const Contact = () => {
+const ContactPopup = ({defaultContactType,setOpenModal}) => {
   const { id } = useAuth();
   const { cID } = useParams();
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Contact = () => {
   } = useForm({
     defaultValues: !cID && {
       contactDesignation: "Individual",
-      contactType: "Customer",
+      contactType: defaultContactType,
       contactIsActive: true,
     },
   });
@@ -184,7 +184,7 @@ const Contact = () => {
         type: "success",
         message: cID ? "Contact is updated!" : "New contact created!",
       });
-      navigate("/dashboard/contacts");
+      setOpenModal(false)
     }
   };
 
@@ -241,13 +241,12 @@ const Contact = () => {
   }
   return (
     <div>
-      <Heading heading={cID ? "Update contact" : "Create new contact"} />
-
+      
       <form className="w-full" onSubmit={handleSubmit(handleContactForm)}>
         <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex md:flex-col md:items-start md:justify-center md:p-6 xl:p-8">
           <Subheading subheading="Details" />
           <div className="grid grid-cols-6 gap-6">
-            <RadioGrp
+           {!defaultContactType && <RadioGrp
               id="contact-type"
               register={register}
               errors={errors}
@@ -257,7 +256,7 @@ const Contact = () => {
               options={options}
               needHeading={true}
               heading="Contact Type"
-            />
+            />}
             <RadioGrp
               id="contact-designation"
               register={register}
@@ -428,7 +427,7 @@ const Contact = () => {
         </div>
         <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
           <div>
-            <CancelBtn handleClick={() => navigate("/dashboard/contacts")} />
+            <CancelBtn handleClick={() =>setOpenModal(false)} />
             <SubmitBtn text={cID ? "Update" : "Save"} />
           </div>
           {cID && <DeleteBtn handleClick={() => setShowDeletePopup(true)} />}
@@ -443,4 +442,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactPopup;

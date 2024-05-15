@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../../../hooks/useAuth";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -23,6 +23,8 @@ import ErrorMsg from "../../../../hooks/ErrorMsg";
 import LoadingMsg from "../../../../hooks/LoadingMsg";
 import SelectWithAdd from "../../../../elements/SelectWithAdd";
 import PopUpModal from "../../../../hooks/PopupModal";
+import ContactPopup from "../../contacts/ContactPopup";
+import { useGetContactsQuery } from "../../contacts/contactApiSlice";
 
 const Job = () => {
   //User Id
@@ -33,7 +35,8 @@ const Job = () => {
 
   //navigate to url
   const navigate = useNavigate();
-
+  const [openModal, setOpenModal] = useState(false);
+  const [customerOptions, setCustomerOptions] = useState();
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   // Use form
   const {
@@ -47,12 +50,17 @@ const Job = () => {
       status: "Open",
     },
   });
+  const {
+    data: contacts,
+    isError,
+    isLoading,
+    isFetching,
+    isSuccess,
+  } = useGetContactsQuery();
 
   // any watch fields
-  // const watchDesignation = watch("jobDesignation");
-
+  const watchContact = watch("contactId");
   // Get Edit data
-
   const {
     data,
     isLoading: jobIsLoading,
@@ -118,14 +126,32 @@ const Job = () => {
   //   }
   // }, [data]);
 
-  //Edit data loading or error msgs
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+  useEffect(() => {
+    if (watchContact == "add") {
+      setOpenModal(true);
+    }
+  }, [watchContact]);
 
+  useEffect(() => {
+    if (!contacts?.entities) return;
+
+    let filteredData = Object.values(contacts.entities).filter(
+      (t) => t.contactType === "Customer"
+    );
+
+    setCustomerOptions(filteredData);
+  }, [contacts]);
+  //Edit data loading or error msgs
   if (jobIsLoading && jobID) {
     return <LoadingMsg />;
   }
   if (jobIsError && jobID) {
     return <ErrorMsg />;
   }
+
   return (
     <div>
       <Heading heading={jobID ? "Update quote" : "Create quote"} />
@@ -167,10 +193,11 @@ const Job = () => {
               label="Linked customer"
               key="job-contactId"
               type="contactId"
+              options={customerOptions}
+              objvalue={"firstName"}
               errors={errors}
               register={register}
               addTitle="Create Customer"
-              reset={reset}
             />
             <FormCheckbox
               id="job-inActive"
@@ -198,7 +225,18 @@ const Job = () => {
         onClose={() => setShowDeletePopup(!showDeletePopup)}
         onConfirm={handleDelete}
       />
-      <PopUpModal></PopUpModal>
+      <PopUpModal
+        title={"Create Customer"}
+        content={
+          <ContactPopup
+            defaultContactType="Customer"
+            setOpenModal={setOpenModal}
+          />
+        }
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        reset={reset}
+      />
     </div>
   );
 };

@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import PopUpModal from "../hooks/PopupModal";
 
 const SelectWithAdd = ({
   options,
@@ -13,9 +11,7 @@ const SelectWithAdd = ({
   objvalue,
   required,
   addTitle,
-  reset,
 }) => {
-  const [openModal, setOpenModal] = useState(false);
   const errorMessage = errors[name]?.message;
 
   const validateSelectOption = (value) => {
@@ -25,18 +21,7 @@ const SelectWithAdd = ({
     }
     return true; // Return true if validation passes
   };
-  const handleSelectChange = (e) => {
-    const selectedOption = e.target.value;
-    console.log(selectedOption);
-    if (selectedOption === "add") {
-      setOpenModal(true);
-    }
-  };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    
-  };
   return (
     <div className="col-span-6 sm:col-span-3">
       <label
@@ -57,7 +42,6 @@ const SelectWithAdd = ({
             ? "bg-red-50 border-red-400 focus:ring-red-500 focus:border-red-500 dark:border-red-600 dark:placeholder-red-400   dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500"
             : "bg-gray-50 border-gray-300 focus-visible:border-blue-500 focus:border-blue-500   dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         }   `}
-        onChange={handleSelectChange}
       >
         {" "}
         <option disabled value="" selected>
@@ -86,7 +70,6 @@ const SelectWithAdd = ({
           {errorMessage}
         </p>
       )}
-      <PopUpModal openModal={openModal} setOpenModal={setOpenModal} reset={reset} />
     </div>
   );
 };
