@@ -6,9 +6,9 @@ const PopUpModal = ({ title, content, openModal, setOpenModal, reset }) => {
       {openModal && (
         <div
           id="modal"
-          className="fixed top-0 left-0 right-0 z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0  max-h-full bg-gray-900/50 dark:bg-gray-900/80 h-full"
+          className="fixed top-0 left-0 right-0 z-50  w-full m-auto p-4 overflow-x-hidden overflow-y-auto md:inset-0  max-h-full bg-gray-900/50 dark:bg-gray-900/80 h-full"
         >
-          <div className="relative w-full max-h-full">
+          <div className="relative w-2/3 max-h-full m-auto">
             {/* <!-- Modal content --> */}
             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
               {/* <!-- Modal header --> */}

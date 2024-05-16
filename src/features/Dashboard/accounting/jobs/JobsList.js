@@ -98,7 +98,7 @@ const JobsList = () => {
   }, [data]);
   return (
     <div>
-      <Heading heading="Tax Codes" />
+      <Heading heading="Jobs" />
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex flex-col md:items-start md:justify-between md:p-6 xl:p-8">
         <div className="flex items-start sm:items-center justify-between">
           <div className="flex flex-col sm:flex-row gap-6">

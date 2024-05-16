@@ -9,11 +9,12 @@ const SelectWithAdd = ({
   name,
   optWithGrp,
   objvalue,
+  value,
+  optLabels,
   required,
   addTitle,
 }) => {
   const errorMessage = errors[name]?.message;
-
   const validateSelectOption = (value) => {
     // Custom validation logic based on the selected value
     if (value === "") {
@@ -48,7 +49,13 @@ const SelectWithAdd = ({
           {" "}
           Select
         </option>
-        <option value="add"> + {addTitle}</option>
+        <option
+          value="add"
+          className="text-blue-600 font-semibold cursor-pointer dark:text-blue-900"
+        >
+          {" "}
+          + {addTitle}
+        </option>
         {optWithGrp
           ? options?.map((grp) => (
               <optgroup label={grp}>
@@ -60,8 +67,13 @@ const SelectWithAdd = ({
               </optgroup>
             ))
           : options?.map((opt, i) => (
-              <option key={opt[objvalue]} value={opt[objvalue]} className="p-2">
-                {opt[objvalue]}
+              <option
+                key={opt[objvalue]}
+                value={opt[objvalue]}
+                className="p-2"
+                selected={value == opt[objvalue]}
+              >
+                {optLabels.find((o) => o._id == opt[objvalue]).label}
               </option>
             ))}
       </select>

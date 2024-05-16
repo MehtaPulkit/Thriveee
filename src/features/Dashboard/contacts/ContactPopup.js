@@ -37,7 +37,7 @@ import DeleteBtn from "../../../elements/DeleteBtn";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
 import { toastAlerts } from "../../../hooks/utils";
 
-const ContactPopup = ({defaultContactType,setOpenModal}) => {
+const ContactPopup = ({ defaultContactType, setOpenModal, resetJob }) => {
   const { id } = useAuth();
   const { cID } = useParams();
   const navigate = useNavigate();
@@ -182,9 +182,10 @@ const ContactPopup = ({defaultContactType,setOpenModal}) => {
     } else {
       toastAlerts({
         type: "success",
-        message: cID ? "Contact is updated!" : "New contact created!",
+        message: cID ? "Contact is updated!" : "New customer created!",
       });
-      setOpenModal(false)
+      resetJob({ contactId: res.data.id });
+      setOpenModal(false);
     }
   };
 
@@ -241,22 +242,23 @@ const ContactPopup = ({defaultContactType,setOpenModal}) => {
   }
   return (
     <div>
-      
       <form className="w-full" onSubmit={handleSubmit(handleContactForm)}>
         <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex md:flex-col md:items-start md:justify-center md:p-6 xl:p-8">
           <Subheading subheading="Details" />
           <div className="grid grid-cols-6 gap-6">
-           {!defaultContactType && <RadioGrp
-              id="contact-type"
-              register={register}
-              errors={errors}
-              name="contactType"
-              required={true}
-              requiredMessage="Contact Type is required"
-              options={options}
-              needHeading={true}
-              heading="Contact Type"
-            />}
+            {!defaultContactType && (
+              <RadioGrp
+                id="contact-type"
+                register={register}
+                errors={errors}
+                name="contactType"
+                required={true}
+                requiredMessage="Contact Type is required"
+                options={options}
+                needHeading={true}
+                heading="Contact Type"
+              />
+            )}
             <RadioGrp
               id="contact-designation"
               register={register}
@@ -427,7 +429,7 @@ const ContactPopup = ({defaultContactType,setOpenModal}) => {
         </div>
         <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
           <div>
-            <CancelBtn handleClick={() =>setOpenModal(false)} />
+            <CancelBtn handleClick={() => setOpenModal(false)} />
             <SubmitBtn text={cID ? "Update" : "Save"} />
           </div>
           {cID && <DeleteBtn handleClick={() => setShowDeletePopup(true)} />}

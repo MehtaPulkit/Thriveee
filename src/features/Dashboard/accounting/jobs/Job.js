@@ -32,11 +32,11 @@ const Job = () => {
 
   // Edit Id
   const { jobID } = useParams();
-
   //navigate to url
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [customerOptions, setCustomerOptions] = useState();
+  const [customerOptLabels, setCustomerOptLabels] = useState();
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   // Use form
   const {
@@ -86,10 +86,23 @@ const Job = () => {
     inActive,
     contactId,
   }) => {
-    console.log(jobNo);
-    console.log(contactId);
-    return;
-    const res = jobID ? await updateJob() : await addNewJob();
+    const res = jobID
+      ? await updateJob({
+        jobId:jobID,
+        jobNo,
+        jobName,
+        description,
+        inActive,
+        contactId,
+      })
+      : await addNewJob({
+          userId: id,
+          jobNo,
+          jobName,
+          description,
+          inActive,
+          contactId,
+        });
     if (res?.data?.isError || res?.error) {
       toastAlerts({ type: "error", message: "There was some error!" });
     } else {
@@ -97,7 +110,7 @@ const Job = () => {
         type: "success",
         message: jobID ? "Job is updated!" : "New job created!",
       });
-      navigate("/dashboard/jobs");
+      navigate("/dashboard/accounting/jobs");
     }
   };
   // Reset for Edit form
@@ -117,14 +130,17 @@ const Job = () => {
       navigate("/dashboard/jobs");
     }
   };
-  // useEffect(() => {
-  //   if (data) {
-  //     reset({
-  //       abn: data?.abn,
-  //       billingAdd1: data?.billingAddress?.addressLine1,
-  //      });
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data) {
+      reset({
+        jobNo: data?.jobNo,
+        jobName: data?.jobName,
+        description: data?.description,
+        inActive: data?.inActive,
+        contactId: data?.contactId,
+      });
+    }
+  }, [data]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -141,9 +157,18 @@ const Job = () => {
     let filteredData = Object.values(contacts.entities).filter(
       (t) => t.contactType === "Customer"
     );
-
     setCustomerOptions(filteredData);
+    setCustomerOptLabels(
+      filteredData.map((d) => ({
+        _id: d._id,
+        label:
+          d.designation == "Company"
+            ? d.companyName
+            : d.firstName + " " + d.lastName,
+      }))
+    );
   }, [contacts]);
+
   //Edit data loading or error msgs
   if (jobIsLoading && jobID) {
     return <LoadingMsg />;
@@ -154,7 +179,7 @@ const Job = () => {
 
   return (
     <div>
-      <Heading heading={jobID ? "Update quote" : "Create quote"} />
+      <Heading heading={jobID ? "Update job" : "Create job"} />
       <form className="w-full" onSubmit={handleSubmit(handleForm)}>
         <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex md:flex-col md:items-start md:justify-center md:p-6 xl:p-8">
           <Subheading subheading="Details" />
@@ -177,6 +202,7 @@ const Job = () => {
               type="jobName"
               errors={errors}
               register={register}
+              required={true}
             />
             <TextArea
               id="job-description"
@@ -194,9 +220,11 @@ const Job = () => {
               key="job-contactId"
               type="contactId"
               options={customerOptions}
-              objvalue={"firstName"}
+              objvalue={"_id"}
+              optLabels={customerOptLabels}
               errors={errors}
               register={register}
+              value={watchContact}
               addTitle="Create Customer"
             />
             <FormCheckbox
@@ -213,7 +241,7 @@ const Job = () => {
         <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
           <div>
             <CancelBtn
-              handleClick={() => navigate("/dashboard/accounting/tax-codes")}
+              handleClick={() => navigate("/dashboard/accounting/jobs")}
             />
             <SubmitBtn text={jobID ? "Update" : "Save"} />
           </div>
@@ -231,6 +259,7 @@ const Job = () => {
           <ContactPopup
             defaultContactType="Customer"
             setOpenModal={setOpenModal}
+            resetJob={reset}
           />
         }
         openModal={openModal}

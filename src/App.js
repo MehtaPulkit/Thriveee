@@ -111,7 +111,7 @@ function App() {
                     <Route path="jobs" element={<JobLayout />}>
                       <Route index element={<JobsList />} />
                       <Route path="create" element={<Job />} />
-                      <Route path="edit/:tcID" element={<Job />} />
+                      <Route path="edit/:jobID" element={<Job />} />
                     </Route>
                   </Route>
                 </Route>
