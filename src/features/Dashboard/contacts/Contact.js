@@ -37,7 +37,7 @@ import DeleteBtn from "../../../elements/DeleteBtn";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
 import { toastAlerts } from "../../../hooks/utils";
 
-const Contact = () => {
+const Contact = ({ defaultContactType, setOpenModal, resetJob, isPopup }) => {
   const { id } = useAuth();
   const { cID } = useParams();
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Contact = () => {
   } = useForm({
     defaultValues: !cID && {
       contactDesignation: "Individual",
-      contactType: "Customer",
+      contactType: defaultContactType || "Customer",
       contactIsActive: true,
     },
   });
@@ -182,9 +182,14 @@ const Contact = () => {
     } else {
       toastAlerts({
         type: "success",
-        message: cID ? "Contact is updated!" : "New contact created!",
+        message: cID ? "Updated successfully!" : "Created successfully!",
       });
-      navigate("/dashboard/contacts");
+      if (isPopup) {
+        resetJob({ contactId: res.data.id });
+        setOpenModal(false);
+      } else {
+        navigate("/dashboard/contacts");
+      }
     }
   };
 
@@ -241,23 +246,26 @@ const Contact = () => {
   }
   return (
     <div>
-      <Heading heading={cID ? "Update contact" : "Create new contact"} />
-
+      {!isPopup && (
+        <Heading heading={cID ? "Update contact" : "Create new contact"} />
+      )}
       <form className="w-full" onSubmit={handleSubmit(handleContactForm)}>
         <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow md:flex md:flex-col md:items-start md:justify-center md:p-6 xl:p-8">
           <Subheading subheading="Details" />
           <div className="grid grid-cols-6 gap-6">
-            <RadioGrp
-              id="contact-type"
-              register={register}
-              errors={errors}
-              name="contactType"
-              required={true}
-              requiredMessage="Contact Type is required"
-              options={options}
-              needHeading={true}
-              heading="Contact Type"
-            />
+            {!defaultContactType && (
+              <RadioGrp
+                id="contact-type"
+                register={register}
+                errors={errors}
+                name="contactType"
+                required={true}
+                requiredMessage="Contact Type is required"
+                options={options}
+                needHeading={true}
+                heading="Contact Type"
+              />
+            )}
             <RadioGrp
               id="contact-designation"
               register={register}
@@ -428,7 +436,16 @@ const Contact = () => {
         </div>
         <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
           <div>
-            <CancelBtn handleClick={() => navigate("/dashboard/contacts")} />
+            <CancelBtn
+              handleClick={() => {
+                if (isPopup) {
+                  setOpenModal(false);
+                  resetJob({ contactId: "" });
+                } else {
+                  navigate("/dashboard/contacts");
+                }
+              }}
+            />
             <SubmitBtn text={cID ? "Update" : "Save"} />
           </div>
           {cID && <DeleteBtn handleClick={() => setShowDeletePopup(true)} />}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { useNavigate, useParams } from "react-router-dom";
 import Heading from "../../../hooks/Heading";
@@ -11,6 +11,10 @@ import SimpleSelect from "../../../elements/SimpleSelect";
 import DeleteBtn from "../../../elements/DeleteBtn";
 import DeleteConfirmationDialog from "../../../hooks/DeleteConfirmationDialog";
 import DatePicker from "../../../elements/DatePicker";
+import SelectWithAdd from "../../../elements/SelectWithAdd";
+import { useGetContactsQuery } from "../contacts/contactApiSlice";
+import PopUpModal from "../../../hooks/PopupModal";
+import Contact from "../contacts/Contact";
 // import { Datepicker } from "flowbite-react";
 
 const Quote = () => {
@@ -23,7 +27,12 @@ const Quote = () => {
   //navigate to url
   const navigate = useNavigate();
 
+  const [openModal, setOpenModal] = useState(false);
+  const [customerOptions, setCustomerOptions] = useState();
+  const [customerOptLabels, setCustomerOptLabels] = useState();
+
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [customerBillingAdd, setCustomerBillingAdd] = useState();
   // Use form
   const {
     register,
@@ -38,8 +47,15 @@ const Quote = () => {
   });
 
   // any watch fields
-  // const watchDesignation = watch("contactDesignation");
+  const watchContact = watch("contactId");
 
+  const {
+    data: contacts,
+    isError,
+    isLoading,
+    isFetching,
+    isSuccess,
+  } = useGetContactsQuery();
   // Get Edit data
 
   // const {
@@ -88,6 +104,36 @@ const Quote = () => {
   // if (contactIsError && cID) {
   //   return <ErrorMsg />;
   // }
+  useEffect(() => {
+    if (watchContact == "add") {
+      setOpenModal(true);
+    } else if (watchContact != "" && contacts) {
+      const [selectedContact] = Object.values(contacts?.entities).filter(
+        (t) => t._id === watchContact
+      );
+      setCustomerBillingAdd(selectedContact?.billingAddress);
+      console.log(selectedContact?.billingAddress);
+    }
+  }, [watchContact]);
+
+  useEffect(() => {
+    if (!contacts?.entities) return;
+
+    let filteredData = Object.values(contacts.entities).filter(
+      (t) => t.contactType === "Customer"
+    );
+    setCustomerOptions(filteredData);
+    setCustomerOptLabels(
+      filteredData.map((d) => ({
+        _id: d._id,
+        label:
+          d.designation == "Company"
+            ? d.companyName
+            : d.firstName + " " + d.lastName,
+      }))
+    );
+  }, [contacts]);
+
   return (
     <div>
       <Heading heading={qID ? "Update quote" : "Create quote"} />
@@ -96,17 +142,40 @@ const Quote = () => {
           <Subheading subheading="Details" />
           <div className="grid grid-cols-6 gap-6">
             <div className="col-span-6 sm:col-span-2">
-              {/* <Input
-                id="quote-quoteNo"
-                name="quoteNo"
-                label="Quote number"
-                key="quote-quoteNo"
-                type="text"
-                errors={errors}
-                // pattern={emailPattern}
-                register={register}
+              <SelectWithAdd
+                id="quote-contactId"
+                name="contactId"
+                label="Customer"
+                key="quote-contactId"
+                type="contactId"
+                options={customerOptions}
                 required={true}
-              /> */}
+                objvalue={"_id"}
+                optLabels={customerOptLabels}
+                errors={errors}
+                register={register}
+                value={watchContact}
+                addTitle="Create Customer"
+              />
+              <div className="mt-4 text-sm">
+                <h3 className="text-gray-600 mb-2 dark:text-white">Billing address</h3>
+                <p className="dark:text-gray-400">
+                  {customerBillingAdd?.addressLine1}
+                </p>
+
+                {customerBillingAdd?.addressLine2 && (
+                  <p className="dark:text-gray-400">
+                    {customerBillingAdd?.addressLine2}
+                  </p>
+                )}
+                <p className="dark:text-gray-400">{customerBillingAdd?.suburb}</p>
+
+                <p className="dark:text-gray-400">
+                  {customerBillingAdd?.state} {customerBillingAdd?.posalCode}
+                </p>
+
+                <p className="dark:text-gray-400">{customerBillingAdd?.country}</p>
+              </div>
             </div>
             <div className="col-span-6 sm:col-start-4 grid grid-cols-3 gap-6">
               <Input
@@ -169,7 +238,7 @@ const Quote = () => {
               />
             </div>
           </div>
-          <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+          <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
         </div>
         <div className="col-span-6 mt-6 flex gap-4 justify-between sm:col-full">
           <div>
@@ -183,6 +252,20 @@ const Quote = () => {
         open={showDeletePopup}
         onClose={() => setShowDeletePopup(!showDeletePopup)}
         onConfirm={handleDelete}
+      />
+      <PopUpModal
+        title={"Create Customer"}
+        content={
+          <Contact
+            defaultContactType="Customer"
+            setOpenModal={setOpenModal}
+            resetJob={reset}
+            isPopup={true}
+          />
+        }
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        reset={reset}
       />
     </div>
   );

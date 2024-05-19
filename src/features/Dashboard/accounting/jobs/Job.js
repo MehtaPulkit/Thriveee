@@ -18,13 +18,12 @@ import TextArea from "../../../../elements/TextArea";
 import FormCheckbox from "../../../../elements/FormCheckbox";
 import DeleteBtn from "../../../../elements/DeleteBtn";
 import Input from "../../../../elements/Input";
-import ComplexSelect from "../../../../elements/ComplexSelect";
 import ErrorMsg from "../../../../hooks/ErrorMsg";
 import LoadingMsg from "../../../../hooks/LoadingMsg";
 import SelectWithAdd from "../../../../elements/SelectWithAdd";
 import PopUpModal from "../../../../hooks/PopupModal";
-import ContactPopup from "../../contacts/ContactPopup";
 import { useGetContactsQuery } from "../../contacts/contactApiSlice";
+import Contact from "../../contacts/Contact";
 
 const Job = () => {
   //User Id
@@ -88,13 +87,13 @@ const Job = () => {
   }) => {
     const res = jobID
       ? await updateJob({
-        jobId:jobID,
-        jobNo,
-        jobName,
-        description,
-        inActive,
-        contactId,
-      })
+          jobId: jobID,
+          jobNo,
+          jobName,
+          description,
+          inActive,
+          contactId,
+        })
       : await addNewJob({
           userId: id,
           jobNo,
@@ -256,10 +255,11 @@ const Job = () => {
       <PopUpModal
         title={"Create Customer"}
         content={
-          <ContactPopup
+          <Contact
             defaultContactType="Customer"
             setOpenModal={setOpenModal}
             resetJob={reset}
+            isPopup={true}
           />
         }
         openModal={openModal}
