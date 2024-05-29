@@ -5,9 +5,9 @@ const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const pages = [
     { pageTitle: "Home", pageUrl: "/" },
-    { pageTitle: "About us", pageUrl: "/about-us" },
-    { pageTitle: "Services", pageUrl: "/services" },
-    { pageTitle: "Contact us", pageUrl: "/contact-us" },
+    { pageTitle: "About us", pageUrl: "/" },
+    { pageTitle: "Services", pageUrl: "/" },
+    { pageTitle: "Contact us", pageUrl: "/" },
   ];
 
   let location = useLocation().pathname;
@@ -81,7 +81,7 @@ const Header = () => {
                   <Link
                     to={page.pageUrl}
                     className={`block py-2 px-3 text-white rounded ${
-                      location.includes(page.pageUrl) && "bg-blue-600"
+                      location.includes(page.pageUrl) && ""
                     } lg:bg-transparent hover:bg-gray-200  hover:text-blue-700 lg:p-0 md:hover:bg-transparent lg:dark:text-blue-500 mb-2`}
                     aria-current="page"
                   >

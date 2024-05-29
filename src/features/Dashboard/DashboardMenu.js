@@ -96,47 +96,47 @@ const DashboardMenu = ({ isOverlay, menuOpen, setMenuOpen }) => {
         
       ],
     },
-    {
-      id: "menu4",
-      name: "Property Investments",
-      link: "property-investments",
-      icon: <HomeModernIcon className={menuIconClassName} />,
-      submenu: [],
-    },
-    {
-      id: "menu5",
-      name: "Financials",
-      link: "financial",
-      icon: <CurrencyDollarIcon className={menuIconClassName} />,
-      submenu: [
-        {
-          id: "menu51",
-          name: "Income",
-          link: "financial/incomes",
-          icon: "",
-        },
-        {
-          id: "menu52",
-          name: "Expenses",
-          link: "financial/expense",
-          icon: "",
-        },
-      ],
-    },
-    {
-      id: "menu6",
-      name: "SMSF",
-      link: "smsf",
-      icon: <WalletIcon className={menuIconClassName} />,
-      submenu: [],
-    },
-    {
-      id: "menu7",
-      name: "Trust",
-      link: "trust",
-      icon: <ScaleIcon className={menuIconClassName} />,
-      submenu: [],
-    },
+    // {
+    //   id: "menu4",
+    //   name: "Property Investments",
+    //   link: "property-investments",
+    //   icon: <HomeModernIcon className={menuIconClassName} />,
+    //   submenu: [],
+    // },
+    // {
+    //   id: "menu5",
+    //   name: "Financials",
+    //   link: "financial",
+    //   icon: <CurrencyDollarIcon className={menuIconClassName} />,
+    //   submenu: [
+    //     {
+    //       id: "menu51",
+    //       name: "Income",
+    //       link: "financial/incomes",
+    //       icon: "",
+    //     },
+    //     {
+    //       id: "menu52",
+    //       name: "Expenses",
+    //       link: "financial/expense",
+    //       icon: "",
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "menu6",
+    //   name: "SMSF",
+    //   link: "smsf",
+    //   icon: <WalletIcon className={menuIconClassName} />,
+    //   submenu: [],
+    // },
+    // {
+    //   id: "menu7",
+    //   name: "Trust",
+    //   link: "trust",
+    //   icon: <ScaleIcon className={menuIconClassName} />,
+    //   submenu: [],
+    // },
     {
       id: "menu8",
       name: "Contacts",

@@ -91,7 +91,7 @@ const Footer = () => {
           <div className="flex mt-4 sm:justify-center md:mt-0 space-x-5 rtl:space-x-reverse">
             <a
               href="#"
-              className=" hover:text-gray-900 hover:text-white"
+              className=" text-gray-400 hover:text-white"
             >
               <svg
                 className="w-4 h-4"
