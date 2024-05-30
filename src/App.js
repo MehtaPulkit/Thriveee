@@ -36,7 +36,7 @@ import TxAccountsList from "./features/dashboard/accounting/taxAccounts/TxAccoun
 import JobLayout from "./features/dashboard/accounting/jobs/JobLayout";
 import JobsList from "./features/dashboard/accounting/jobs/JobsList";
 import Job from "./features/dashboard/accounting/jobs/Job";
-import DashboardLayout from "./features/dashboard/DashboardLayout";
+import MainLayout from "./features/dashboard/MainLayout";
 
 function App() {
   return (
@@ -70,7 +70,7 @@ function App() {
               element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
             >
               <Route element={<Prefetch />}>
-                <Route path="/dashboard" element={<DashboardLayout />}>
+                <Route path="/dashboard" element={<MainLayout />}>
                   <Route index element={<DashboardHome />} />
                   <Route path="account" element={<Account />}>
                     <Route index element={<AccountSummary />} />

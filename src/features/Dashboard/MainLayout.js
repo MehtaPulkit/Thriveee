@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import DashboardHeader from "./DashboardHeader";
 import { Outlet } from "react-router-dom";
-import DashboardFooter from "./DashboardFooter";
-import DashboardMenu from "./DashboardMenu";
 import useScreenSize from "../../hooks/useScreenSize";
+import DashboardMenu from "./DashboardMenu";
+import DashboardHeader from "./DashboardHeader";
+import DashboardFooter from "./DashboardFooter";
 
-const DashboardLayout = () => {
+const MainLayout = () => {
   const screenSize = useScreenSize();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -27,4 +27,4 @@ const DashboardLayout = () => {
   );
 };
 
-export default DashboardLayout;
+export default MainLayout;
