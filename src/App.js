@@ -12,7 +12,6 @@ import Signup from "./features/auth/Signup";
 import PersistLogin from "./features/auth/PersistLogin";
 import RequireAuth from "./features/auth/RequireAuth";
 import Prefetch from "./features/auth/Prefetch";
-import DashboardLayout from "./features/dashboard/DashboardLayout";
 import DashboardHome from "./features/dashboard/DashboardHome";
 import Account from "./features/dashboard/account/Account";
 import UserProfile from "./features/dashboard/account/user/UserProfile";
@@ -37,6 +36,7 @@ import TxAccountsList from "./features/dashboard/accounting/taxAccounts/TxAccoun
 import JobLayout from "./features/dashboard/accounting/jobs/JobLayout";
 import JobsList from "./features/dashboard/accounting/jobs/JobsList";
 import Job from "./features/dashboard/accounting/jobs/Job";
+import DashboardLayout from "./features/dashboard/DashboardLayout";
 
 function App() {
   return (
