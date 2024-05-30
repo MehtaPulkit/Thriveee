@@ -72,7 +72,7 @@ const DashboardMenu = ({ isOverlay, menuOpen, setMenuOpen }) => {
         {
           id: "menu31",
           name: "General Journals",
-          link: "accounting/general-journals",
+          link: "",
           icon: "",
         },
         {
@@ -170,34 +170,34 @@ const DashboardMenu = ({ isOverlay, menuOpen, setMenuOpen }) => {
     {
       id: "lMenu1",
       name: "Privacy",
-      link: "privacy",
+      link: "",
       icon: <LockClosedIcon className={menuIconClassName} />,
       submenu: [],
     },
     {
       id: "lmenu2",
       name: "Terms & conditions",
-      link: "termsandconditions",
+      link: "",
       icon: <DocumentDuplicateIcon className={menuIconClassName} />,
       submenu: [],
     },
     {
       id: "lmenu3",
       name: "Support",
-      link: "support",
+      link: "",
       icon: <LifebuoyIcon className={menuIconClassName} />,
       submenu: [],
     },
     {
       id: "lmenu4",
       name: "Tutorials",
-      link: "tutorials",
+      link: "",
       icon: <ClipboardDocumentListIcon className={menuIconClassName} />,
       submenu: [
         {
           id: "lmenu41",
           name: "password reset",
-          link: "tutorials/password-reset",
+          link: "",
           icon: "",
         },
       ],

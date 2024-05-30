@@ -1,95 +1,47 @@
 import React from "react";
 import Welcome from "./Welcome";
 import SimpleBarGraph from "./SimpleBarGraph";
-
-const IncomeData = [
+import SimpleLineGraph from "./SimpleLineGraph";
+import info from "../../assets/infographic.jpeg";
+const FinancialData = [
   {
     name: "Jan",
     uv: 4000,
     Income: 2400,
-    amt: 2400,
+    Expense: 2400,
   },
   {
     name: "Feb",
     uv: 3000,
     Income: 1398,
-    amt: 2210,
+    Expense: 2210,
   },
   {
     name: "Mar",
     uv: 2000,
     Income: 4800,
-    amt: 2290,
+    Expense: 2290,
   },
   {
     name: "Apr",
     uv: 2780,
     Income: 3908,
-    amt: 2000,
+    Expense: 2000,
   },
   {
-    name: "Jun",
-    uv: 1890,
-    Income: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Jul",
-    uv: 2390,
-    Income: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Aug",
-    uv: 3490,
-    Income: 4300,
-    amt: 2100,
-  },
-];
-const ExpenseData = [
-  {
-    name: "Jan",
-    uv: 4000,
-    Expense: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Feb",
-    uv: 3000,
-    Expense: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Mar",
-    uv: 2000,
-    Expense: 400,
-    amt: 2290,
-  },
-  {
-    name: "Apr",
+    name: "May",
     uv: 2780,
-    Expense: 1200,
-    amt: 2000,
+    Income: 1908,
+    Expense: 2000,
   },
   {
     name: "Jun",
     uv: 1890,
-    Expense: 3000,
-    amt: 2181,
-  },
-  {
-    name: "Jul",
-    uv: 2390,
-    Expense: 300,
-    amt: 2500,
-  },
-  {
-    name: "Aug",
-    uv: 3490,
-    Expense: 2800,
-    amt: 2100,
+    Income: 0,
+    Expense: 0,
   },
 ];
+
 const DashboardHome = () => {
   return (
     <div
@@ -98,27 +50,31 @@ const DashboardHome = () => {
     >
       <main>
         <div className="px-4 pt-6">
-          <Welcome />
-          <div>
-          <div className="flex flex-col">
-            <SimpleBarGraph
-              data={IncomeData}
-              keyData="Income"
-              fill="#1a56dbb0"
-              hoverFill="#316aeb"
-            />
-            <SimpleBarGraph
-              data={ExpenseData}
-              keyData="Expense"
-              fill="#8d2d2db0"
-              hoverFill="#c73335"
-            />
+          <div className="flex justify-between my-6 flex-col md:flex-row">
+            <Welcome />
+            <img alt="infographic" src={info} className="w-64 rounded-lg" />
           </div>
-          <div >
 
+          <div className="flex justify-between flex-col md:flex-row">
+          <div>
+              <SimpleLineGraph data={FinancialData} />
+            </div>
+            <div className="flex flex-col gap-12">
+              <SimpleBarGraph
+                data={FinancialData}
+                keyData="Income"
+                fill="#1a56dbb0"
+                hoverFill="#316aeb"
+              />
+              <SimpleBarGraph
+                data={FinancialData}
+                keyData="Expense"
+                fill="#8d2d2db0"
+                hoverFill="#c73335"
+              />
+            </div>
+           
           </div>
-          </div>
-          
         </div>
       </main>
     </div>

@@ -15,7 +15,7 @@ import {
 const SimpleBarGraph = ({data,keyData,fill,hoverFill}) => {
   return (
     <BarChart
-      width={500}
+      width={400}
       height={300}
       data={data}
       margin={{
@@ -35,6 +35,7 @@ const SimpleBarGraph = ({data,keyData,fill,hoverFill}) => {
         fill={fill}
         activeBar={<Rectangle fill={hoverFill} stroke="blue" />}
       />
+      
     </BarChart>
   );
 };
