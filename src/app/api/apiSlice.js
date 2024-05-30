@@ -4,7 +4,7 @@ import { setCredentials } from "../../features/auth/authSlice";
 
 // for local baseUrl: "http://localhost:3500",
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://thriveee-api.onrender.com",
+  baseUrl: "https://thriveee-api.onrender.com",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
